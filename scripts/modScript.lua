@@ -1,0 +1,2 @@
+--load("EXTENSIONNAME")
+--registerCoreModule("EXTENSIONNAME")

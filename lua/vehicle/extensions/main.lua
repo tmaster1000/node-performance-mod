@@ -8,5 +8,5 @@ function onPhysicsStep(dtPhys)
     extensionsHook("onPhysicsStep", dtPhys)
 end
 
-M.updateGFX = updateGFX
+
 return main

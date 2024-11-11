@@ -2,7 +2,6 @@
 --Injects into stage2.lua to modify node collision parameters
 local stage2 = require("vehicle/jbeam/stage2")
 local abs = math.abs
-local wheelNodes = {}
 
 local function nodeCheck(nodeID, vehicle)
     local connectedNodes = {}
@@ -53,6 +52,9 @@ do
                 if vehicle.nodes == nil then return end
 
                 for _, node in pairs(vehicle.nodes) do -- For each node
+                    if node.cid == 61 then
+                        dump(node)
+                    end
 
                     if node.wheelID ~= nil or nodeCheck(node.cid, vehicle) == true or node.couplerTag ~= nil or node.tag ~= nil then -- If it's a wheel or on the outer shell or part of a coupler system
                         goto continue
@@ -96,18 +98,6 @@ do
             end)
             print("Partially disabled collisions and aero for non-player vehicle " .. tostring(obj:getID()))
         else
-
-
-
-
-
-
-
-
-
-
-
-
             print("Skipped aerodynamics and collision disabling for player vehicle")
         end
 

@@ -1,14 +1,15 @@
 local M = {}
 local setPartsOrig = core_vehicle_partmgmt.setPartsConfig
+local setConfigVarsOrig = core_vehicle_partmgmt.setConfigVars
 
 core_vehicle_partmgmt.setPartsConfig = function(...) --parts changed
     perfMod.playerSpawnProcessing = true
     setPartsOrig(...)
 end
 
-core_vehicle_partmgmt.setVarsConfig = function(...) --tuning changed
+core_vehicle_partmgmt.setConfigVars = function(...) --tuning changed
     perfMod.playerSpawnProcessing = true
-    setPartsOrig(...)
+    setConfigVarsOrig(...)
 end
 
 -- public interface

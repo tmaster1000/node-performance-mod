@@ -52,9 +52,6 @@ do
                 if vehicle.nodes == nil then return end
 
                 for _, node in pairs(vehicle.nodes) do -- For each node
-                    if node.cid == 61 then
-                        dump(node)
-                    end
 
                     if node.wheelID ~= nil or nodeCheck(node.cid, vehicle) == true or node.couplerTag ~= nil or node.tag ~= nil then -- If it's a wheel or on the outer shell or part of a coupler system
                         goto continue

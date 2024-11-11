@@ -6,8 +6,9 @@ local updateEveryNFrames = 10
 
 function onPhysicsStep(dtPhys)
     frameCounter = frameCounter + 1
-    extensionsHook("onPhysicsStep", dtPhys)
+
     if frameCounter >= updateEveryNFrames then
+        extensionsHook("onPhysicsStep", dtPhys)
         powertrain.update(dtPhys * updateEveryNFrames)  -- adjust time for skipped frames
 
         frameCounter = 0

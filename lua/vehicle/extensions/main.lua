@@ -1,24 +1,32 @@
 local main = require("vehicle/main")
 extensions = require("extensions")
 extensionsHook = extensions.hook
-local frameCounter = 9 -- initialize at 9 so the first physics step is 2000hz
-local updateEveryNFrames = 10
+local frameCounter10 = 9
+local frameCounter2 = 1
+local updateEvery10Frames = 10
+local updateEvery2Frames = 2
 
 function onPhysicsStep(dtPhys)
-    frameCounter = frameCounter + 1
-    extensionsHook("onPhysicsStep", dtPhys) --beammp itself runs on physics step, dont wanna touch this
 
-    if frameCounter >= updateEveryNFrames then
-        wheels.updateWheelVelocities(dtPhys * updateEveryNFrames)
-        powertrain.update(dtPhys * updateEveryNFrames)
-        controller.updateWheelsIntermediate(dtPhys * updateEveryNFrames)
-        wheels.updateWheelTorques(dtPhys * updateEveryNFrames)
-        controller.update(dtPhys * updateEveryNFrames)
+    frameCounter10 = frameCounter10 + 1
+    frameCounter2 = frameCounter2 + 1
+
+    if frameCounter2 >= updateEvery2Frames then
+        powertrain.update(dtPhys * updateEvery2Frames)
+        wheels.updateWheelTorques(dtPhys * updateEvery2Frames)
+        wheels.updateWheelVelocities(dtPhys * updateEvery10Frames)
+        controller.updateWheelsIntermediate(dtPhys * updateEvery10Frames)
         thrusters.update()
-        hydros.update(dtPhys * updateEveryNFrames)
-        beamstate.update(dtPhys * updateEveryNFrames)
-        protocols.update(dtPhys * updateEveryNFrames)
-        frameCounter = 0
+        extensionsHook("onPhysicsStep", dtPhys)
+        frameCounter2 = 0
+    end
+
+    if frameCounter10 >= updateEvery10Frames then
+        controller.update(dtPhys * updateEvery10Frames)
+        hydros.update(dtPhys * updateEvery10Frames)
+        beamstate.update(dtPhys * updateEvery10Frames)
+        protocols.update(dtPhys * updateEvery10Frames)
+        frameCounter10 = 0
     end
 end
 

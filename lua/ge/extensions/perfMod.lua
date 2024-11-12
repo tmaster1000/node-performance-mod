@@ -35,7 +35,7 @@ end
 local function onSpawnCCallback(objID)
 
     if not isLoaded then --spaghetti solution because loading this as a dependency is too early - **THIS BREAKS LUA CTRL+L RELOADS, REMOVE IF MAKING EDITS**
-        extensions.load('partmgmt')
+       extensions.load('partmgmt')
         isLoaded = true
     end
 
@@ -90,8 +90,8 @@ local function onSpawnCCallback(objID)
         M.playerReloadProcessing = false
         --print("NPC spawned or reloaded: " .. objID)
         vehicleConfig_.isPlayerVehicle = false
-        --obj:queueLuaCommand("extensions.load('main')") --deletes specific vehicle systems from physics step
-        --obj:queueLuaCommand("extensions.load('physicsToGFX')")
+        obj:queueLuaCommand("extensions.load('main')") --physics step slowdown
+        print("Controller physics step slowed down for " .. objID)
     end
 end
 

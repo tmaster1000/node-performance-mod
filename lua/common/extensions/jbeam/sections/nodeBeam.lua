@@ -18,7 +18,7 @@ local function simplifyWheels(vehicle)
 
         v.triangleCollision = false
         v.selfCollision = false
-        v.dragCoef = 0
+        --v.dragCoef = 0
 
         v.hubRadiusSimple = v.hubRadius
         v.hubRadius = v.radius

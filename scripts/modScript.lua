@@ -1,2 +1,0 @@
---load("EXTENSIONNAME")
---registerCoreModule("EXTENSIONNAME")

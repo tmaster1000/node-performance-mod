@@ -3,7 +3,7 @@
 local M = {}
 local defaultVehOrig = core_levels.maybeLoadDefaultVehicle
 
-core_levels.maybeLoadDefaultVehicle = function()
+core_levels.maybeLoadDefaultVehicle = function() --for some reason this marks one player as player on beammp server join
     perfMod.playerSpawnProcessing = true
     defaultVehOrig()
 end

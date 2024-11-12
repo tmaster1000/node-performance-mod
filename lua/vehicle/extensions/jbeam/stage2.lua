@@ -36,29 +36,48 @@ end
 
 do
     local loadVehicleStage2 = stage2.loadVehicleStage2
-
     stage2.loadVehicleStage2 = function(v)
+
         stage2.loadVehicleStage2 = loadVehicleStage2
+        local pushToPhysics = ({debug.getupvalue(stage2.loadVehicleStage2, 1)})[2]
+        local processNodes = ({debug.getupvalue(pushToPhysics, 1)})[2]
+        --local processBeams = ({debug.getupvalue(pushToPhysics, 2)})[2]
+        --local processWheels = ({debug.getupvalue(pushToPhysics, 3)})[2]
+        --local processRails = ({debug.getupvalue(pushToPhysics, 4)})[2]
+        --local processSlidenodes = ({debug.getupvalue(pushToPhysics, 5)})[2]
+        --local processTorsionhydros = ({debug.getupvalue(pushToPhysics, 6)})[2]
+       -- local processTorsionbars = ({debug.getupvalue(pushToPhysics, 7)})[2]
+        local processTriangles = ({debug.getupvalue(pushToPhysics, 8)})[2]
+        --local processRefNodes = ({debug.getupvalue(pushToPhysics, 9)})[2]
 
-        local isPlayerVehicle = v.config.isPlayerVehicle
-
-        if not isPlayerVehicle then
-
-            local pushToPhysics = ({debug.getupvalue(stage2.loadVehicleStage2, 1)})[2]
-            local processNodes  = ({debug.getupvalue(pushToPhysics, 1)})[2]
-            local processTriangles  = ({debug.getupvalue(pushToPhysics, 2)})[2]
+        if  v.config.isPlayerVehicle then --player modifications
             debug.setupvalue(pushToPhysics, 1, function(vehicle)
 
                 if vehicle.nodes == nil then return end
 
-                for _, node in pairs(vehicle.nodes) do -- For each node
+                for _, node in pairs(vehicle.nodes) do
+                    if node.selfCollision ~= nil then
+                        node.selfCollision = false
+                    end
+                end
 
-                    if node.wheelID ~= nil or nodeCheck(node.cid, vehicle) == true or node.couplerTag ~= nil or node.tag ~= nil then -- If it's a wheel or on the outer shell or part of a coupler system
+                debug.setupvalue(pushToPhysics, 1, processNodes)
+                return processNodes(vehicle)
+            end)
+        print("selfCollision disabled for player")
+        else --non player modifications
+            debug.setupvalue(pushToPhysics, 1, function(vehicle)
+
+                if vehicle.nodes == nil then return end
+
+                for _, node in pairs(vehicle.nodes) do
+
+                    if node.wheelID ~= nil or nodeCheck(node.cid, vehicle) == true then
                         goto continue
                     end
-                    node.collision = false --disable all collision
+                    node.collision = false
                     ::continue::
-                    if node.selfCollision ~= nil then --disable selfcollision anyway
+                    if node.selfCollision ~= nil then
                         node.selfCollision = false
                     end
                 end
@@ -67,7 +86,7 @@ do
                 return processNodes(vehicle)
             end)
 
-            debug.setupvalue(pushToPhysics, 2, function(vehicle)
+            debug.setupvalue(pushToPhysics, 8, function(vehicle)
 
                 if vehicle.triangles == nil then return end
 
@@ -90,12 +109,12 @@ do
                     end
 
                 end
-                debug.setupvalue(pushToPhysics, 1, processTriangles)
+
+                debug.setupvalue(pushToPhysics, 8, processTriangles)
+
                 return processTriangles(vehicle)
             end)
-            print("Partially disabled collisions and aero for non-player vehicle " .. tostring(obj:getID()))
-        else
-            print("Skipped aerodynamics and collision disabling for player vehicle")
+            print("aero disabled and collision limited for non-player " .. tostring(obj:getID()))
         end
 
         return loadVehicleStage2(v)

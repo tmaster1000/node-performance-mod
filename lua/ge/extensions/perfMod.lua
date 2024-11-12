@@ -91,7 +91,7 @@ local function onSpawnCCallback(objID)
         --print("NPC spawned or reloaded: " .. objID)
         vehicleConfig_.isPlayerVehicle = false
         obj:queueLuaCommand("extensions.load('main')") --deletes specific vehicle systems from physics step
-        obj:queueLuaCommand("extensions.load('physicsToGFX')") --transfers specific vehicle systems to graphics step
+        --obj:queueLuaCommand("extensions.load('physicsToGFX')")
     end
 end
 

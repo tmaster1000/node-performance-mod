@@ -25,7 +25,7 @@ local function simplifyWheels(vehicle)
         v.hubRadiusSimple = v.hubRadius
         v.hubRadius = v.radius
         v.hubWidth = v.tireWidth
-        v.hubFrictionCoef = v.frictionCoef * 2 double this to reduce desync wheelspin
+        v.hubFrictionCoef = v.frictionCoef * 2 --double this to reduce desync wheelspin
         v.hubNodeMaterial = v.nodeMaterial
         v.hubTreadBeamSpring = v.wheelTreadBeamSpring;
         v.hubTreadBeamDamp = v.wheelTreadBeamDamp;

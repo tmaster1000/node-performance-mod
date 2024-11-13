@@ -4,9 +4,18 @@ local M = {}
 local defaultVehOrig = core_levels.maybeLoadDefaultVehicle
 
 core_levels.maybeLoadDefaultVehicle = function()
-    perfMod.playerSpawnProcessing = true
+
+    local isMPSession = MPCoreNetwork and MPCoreNetwork.isMPSession and MPCoreNetwork.isMPSession()
+    if not isMPSession then
+
+        perfMod.playerSpawnProcessing = true
+    else
+        print("MP scenario, default vehicle wont be a player")
+    end
+
     defaultVehOrig()
 end
+
 
 M.onGetRawPoiListForLevel = onGetRawPoiListForLevel
 

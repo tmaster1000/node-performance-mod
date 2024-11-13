@@ -66,7 +66,7 @@ nodeBeam.process = function(vehicle)
    perfMod.playerSpawnProcessing = false
    perfMod.playerReloadProcessing = false
 
-    originalProcess(vehicle)   Call the original process, which now includes the modified processNodes
+    originalProcess(vehicle)
 end
 
 M.process = nodeBeam.process

@@ -57,8 +57,8 @@ end
 
 nodeBeam.process = function(vehicle)
    if perfMod.playerSpawnProcessing or perfMod.playerReloadProcessing then
-        simplifyWheels(vehicle)
-        print("Skipping wheel simplifying for player vehicle")
+
+      print("Skipping wheel simplifying for player vehicle")
   else
       simplifyWheels(vehicle)
       print("Applied wheel simplifying for non-player vehicle")

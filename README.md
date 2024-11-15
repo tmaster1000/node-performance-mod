@@ -1,5 +1,4 @@
-**This mod attempts to optimize remote vehicles for better BeamMP performance. For the player vehicle it disables collision with itself.
-**
+This mod attempts to optimize remote vehicles for better BeamMP performance. For the player vehicle it disables collision with itself.
 
 Options are in lua/ge/extensions/perfMod.lua:
 

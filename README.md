@@ -11,3 +11,7 @@ M.disableAero = true --REMOTE VEHICLES: sets all aerodynamic parameters to 0
 M.disableTires = true --REMOTE VEHICLES: removes tires and gives hubs tire-like properties
 
 M.limitLua = false --REMOTE VEHICLES: limits controller update rate from 2000hz to 200hz or 1000hz
+
+Current bugs: 
+1. Wheel nodes are very rarely left behind, creating a rather ugly looking stretching mesh. Probably fixable by editing the wheel jbeam parameters.
+2. Player can't tow trailers because of reduced collisions. Could be fixed by excluding the critical nodes from the modifications.

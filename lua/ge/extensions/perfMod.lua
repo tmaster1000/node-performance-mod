@@ -2,6 +2,15 @@
 --GE LUA player processing is marked with global variables, VE LUA vehicles are marked by setting vehicleConfig values
 
 local M = {}
+
+--options
+M.reduceCollision = true -- REMOTE VEHICLES: disables collision for nodes not on the outer shell. PLAYER VEHICLE: disables collision with own nodes
+M.disablePropsLights = true --REMOTE VEHICLES: disables headlight flares and all props except the wheel
+M.disableAero = true --REMOTE VEHICLES: sets all aerodynamic parameters to 0
+M.disableTires = true --REMOTE VEHICLES: removes tires and gives hubs tire-like properties
+M.limitLua = false --REMOTE VEHICLES: limits controller update rate from 2000hz to 200hz or 1000hz
+------------------------
+
 local playerVehicles = {}
 M.playerSpawnProcessing = false
 M.playerReloadProcessing = false
@@ -89,7 +98,17 @@ local function onSpawnCCallback(objID)
     else
         M.playerReloadProcessing = false
         --print("NPC spawned or reloaded: " .. objID)
-        vehicleConfig_.isPlayerVehicle = false
+        if M.reduceCollision then
+            vehicleConfig_.isPlayerVehicle = false
+        else
+            vehicleConfig_.isPlayerVehicle = true
+        end
+
+        if M.limitLua then
+            print("limiting lua")
+            obj:queueLuaCommand("extensions.load('main')")
+        end
+
     end
 end
 

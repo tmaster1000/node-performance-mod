@@ -47,7 +47,7 @@ do
         --local processSlidenodes = ({debug.getupvalue(pushToPhysics, 5)})[2]
         --local processTorsionhydros = ({debug.getupvalue(pushToPhysics, 6)})[2]
        -- local processTorsionbars = ({debug.getupvalue(pushToPhysics, 7)})[2]
-        local processTriangles = ({debug.getupvalue(pushToPhysics, 8)})[2]
+       --local processTriangles = ({debug.getupvalue(pushToPhysics, 8)})[2]
         --local processRefNodes = ({debug.getupvalue(pushToPhysics, 9)})[2]
 
         if  v.config.isPlayerVehicle then --player modifications
@@ -85,38 +85,8 @@ do
                 debug.setupvalue(pushToPhysics, 1, processNodes)
                 return processNodes(vehicle)
             end)
-
-            debug.setupvalue(pushToPhysics, 8, function(vehicle)
-
-                if vehicle.triangles == nil then return end
-
-                for _, triangle in pairs(vehicle.triangles) do
-
-                    if triangle.liftCoef ~= nil then
-                        triangle.liftCoef = 0
-                    end
-
-                    if triangle.dragCoef ~= nil then
-                        triangle.dragCoef = 0
-                    end
-
-                    if triangle.stallAngle ~= nil then
-                        triangle.stallAngle = 0
-                    end
-
-                    if triangle.skinDragCoef ~= nil then
-                        triangle.skinDragCoef = 0
-                    end
-
-                end
-
-                debug.setupvalue(pushToPhysics, 8, processTriangles)
-
-                return processTriangles(vehicle)
-            end)
-            print("aero disabled and collision limited for non-player " .. tostring(obj:getID()))
+            print("Collision limited for non-player")
         end
-
         return loadVehicleStage2(v)
     end
 end

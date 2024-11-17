@@ -35,7 +35,7 @@ local function simplifyWheels(vehicle)
         v.hubSideBeamDeform = (v.hubSideBeamDeform or 75568.343750) * hubFactor + (v.wheelSideBeamDeform or 75568.343750) * tireFactor
         v.hubSideBeamStrength = (v.hubSideBeamStrength or 85626.000000) * hubFactor + (v.wheelSideBeamStrength or 85626.000000) * tireFactor
         v.hubSideBeamSpring = math.floor(((v.hubSideBeamSpring or 251000) * hubFactor + (v.wheelSideBeamSpring or 251000) * tireFactor) * 0.7)  --multiply by 0.7 to reduce desync wheelspin
-        v.hubSideBeamDamp = math.floor(((v.hubSideBeamDamp or 200) * hubFactor + (v.wheelSideBeamDamp or 200) * tireFactor) * 100 + 0.5) / 100
+        v.hubSideBeamDamp = v.wheelSideBeamDamp --had a crazy value here, wheel value might fix instability
         v.hubPeripheryBeamSpring = ((v.hubPeripheryBeamSpring or 301000) * hubFactor + (v.wheelPeripheryBeamSpring or 301000) * tireFactor)
         v.hubPeripheryBeamDamp = ((v.hubPeripheryBeamDamp or 150) * hubFactor + (v.wheelPeripheryBeamDamp or 150) * tireFactor)
 

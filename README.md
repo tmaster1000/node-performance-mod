@@ -15,5 +15,8 @@ Current bugs:
    1. Scintilla GT3. Fixed on rigged servers but elsewhere this car is incompatible with reduceCollisions.
    2. Very rarely cobalt radar. That mod has some missing nil-checks that sometimes throw a fatal exception. If this happens, just reload the affected vehicle with CTRL+R
 
+
+**The wheel mods can sometimes cause instability. If you want a 100% safe version of this mod, set disableTires to false.**
+
 Performance comparison with unmodded game running 20 AI-driven covets on the Automation Test Track with 'High' graphics preset:
 ![image](https://github.com/user-attachments/assets/94d24680-cb86-4e64-a4c9-7c21b78207a4)

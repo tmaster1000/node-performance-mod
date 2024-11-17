@@ -9,8 +9,11 @@ Options are in lua/ge/extensions/perfMod.lua:
 5. M.disableParticles = REMOTE VEHICLES: disables collision-based particle effects
 
 Current bugs: 
-1. Wheel nodes are very rarely left behind, creating a rather ugly looking stretching mesh. Probably fixable by editing the wheel jbeam parameters.
+1. ReduceCollision sometimes produces very wonky deformation.
 2. Player can't tow trailers because of reduced collisions. Could be fixed by excluding the critical nodes from the modifications.
+3. **Incompatibility with the following mods**:
+   1. Scintilla GT3. Fixed on rigged servers but elsewhere this car is incompatible with reduceCollisions.
+   2. Very rarely cobalt radar. That mod has some missing nil-checks that sometimes throw a fatal exception. If this happens, just reload the affected vehicle with CTRL+R
 
 Performance comparison with unmodded game running 20 AI-driven covets on the Automation Test Track with 'High' graphics preset:
 ![image](https://github.com/user-attachments/assets/94d24680-cb86-4e64-a4c9-7c21b78207a4)

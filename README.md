@@ -11,3 +11,6 @@ Options are in lua/ge/extensions/perfMod.lua:
 Current bugs: 
 1. Wheel nodes are very rarely left behind, creating a rather ugly looking stretching mesh. Probably fixable by editing the wheel jbeam parameters.
 2. Player can't tow trailers because of reduced collisions. Could be fixed by excluding the critical nodes from the modifications.
+
+Performance comparison with unmodded game running 20 AI-driven covets on the Automation Test Track:
+![image](https://github.com/user-attachments/assets/94d24680-cb86-4e64-a4c9-7c21b78207a4)

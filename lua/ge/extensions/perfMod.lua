@@ -8,7 +8,7 @@ M.reduceCollision = true -- REMOTE VEHICLES: disables collision for nodes not on
 M.disablePropsLights = true --REMOTE VEHICLES: disables headlight flares and all props except the wheel
 M.disableAero = true --REMOTE VEHICLES: sets all aerodynamic parameters to 0
 M.disableTires = true --REMOTE VEHICLES: removes tires and gives hubs tire-like properties
-M.limitLua = false --REMOTE VEHICLES: limits controller update rate from 2000hz to 200hz or 1000hz
+M.disableParticles = true --REMOTE VEHICLES: Disables particle effects
 ------------------------
 
 local playerVehicles = {}
@@ -104,8 +104,7 @@ local function onSpawnCCallback(objID)
             vehicleConfig_.isPlayerVehicle = true
         end
 
-        if M.limitLua then
-            print("limiting lua")
+        if M.disableParticles then
             obj:queueLuaCommand("extensions.load('main')")
         end
 

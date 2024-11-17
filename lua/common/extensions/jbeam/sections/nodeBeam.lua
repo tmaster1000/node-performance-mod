@@ -25,19 +25,19 @@ local function simplifyWheels(vehicle)
         v.hubRadiusSimple = v.hubRadius
         v.hubRadius = v.radius
         v.hubWidth = v.tireWidth
-        v.hubFrictionCoef = v.frictionCoef * 2 --double this to reduce desync wheelspin
+        v.hubFrictionCoef = v.frictionCoef * 1.5
         v.hubNodeMaterial = v.nodeMaterial
         v.hubTreadBeamSpring = v.wheelTreadBeamSpring;
         v.hubTreadBeamDamp = v.wheelTreadBeamDamp;
 
         --constants taken from simplified bastion
 
-        v.hubSideBeamDeform = (v.hubSideBeamDeform or 75568.343750) * hubFactor + (v.wheelSideBeamDeform or 75568.343750) * tireFactor
-        v.hubSideBeamStrength = (v.hubSideBeamStrength or 85626.000000) * hubFactor + (v.wheelSideBeamStrength or 85626.000000) * tireFactor
-        v.hubSideBeamSpring = math.floor(((v.hubSideBeamSpring or 251000) * hubFactor + (v.wheelSideBeamSpring or 251000) * tireFactor) * 0.7)  --multiply by 0.7 to reduce desync wheelspin
-        v.hubSideBeamDamp = v.wheelSideBeamDamp --had a crazy value here, wheel value might fix instability
-        v.hubPeripheryBeamSpring = ((v.hubPeripheryBeamSpring or 301000) * hubFactor + (v.wheelPeripheryBeamSpring or 301000) * tireFactor)
-        v.hubPeripheryBeamDamp = ((v.hubPeripheryBeamDamp or 150) * hubFactor + (v.wheelPeripheryBeamDamp or 150) * tireFactor)
+        v.hubSideBeamDeform = ((v.hubSideBeamDeform or 75568.343750) * hubFactor + (v.wheelSideBeamDeform or 75568.343750) * tireFactor) * 2
+        v.hubSideBeamStrength = ((v.hubSideBeamStrength or 85626.000000) * hubFactor + (v.wheelSideBeamStrength or 85626.000000) * tireFactor) * 2
+        v.hubSideBeamSpring = math.floor(((v.hubSideBeamSpring or 251000) * hubFactor + (v.wheelSideBeamSpring or 251000) * tireFactor) * 1)
+        v.hubSideBeamDamp = v.wheelSideBeamDamp * 1.5
+        v.hubPeripheryBeamSpring = ((v.hubPeripheryBeamSpring or 301000) * hubFactor + (v.wheelPeripheryBeamSpring or 301000) * tireFactor) * 2
+        v.hubPeripheryBeamDamp = ((v.hubPeripheryBeamDamp or 150) * hubFactor + (v.wheelPeripheryBeamDamp or 150) * tireFactor) * 2
 
        v.hubReinfBeamSpring = v.wheelReinfBeamSpring
        v.hubReinfBeamDamp = v.wheelReinfBeamDamp
@@ -53,11 +53,27 @@ local function simplifyWheels(vehicle)
     else
         print("vehicle[pressureWheels] is nil")
     end
+
+
+
+
+
+   -- for k in pairs(vehicle["beams"]) do
+     --   if vehicle["beams"][k].beamType == 2 then
+     --   vehicle["beams"][k].beamType = 0
+     ---   end
+   -- end
+
 end
+
+
+
+
 
 nodeBeam.process = function(vehicle)
 
     if perfMod.playerSpawnProcessing or perfMod.playerReloadProcessing then
+
         print("Skipping wheel simplifying for player vehicle")
     elseif perfMod.disableTires then
       simplifyWheels(vehicle)

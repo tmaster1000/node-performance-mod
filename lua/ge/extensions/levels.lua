@@ -3,11 +3,15 @@
 local M = {}
 local defaultVehOrig = core_levels.maybeLoadDefaultVehicle
 
-core_levels.maybeLoadDefaultVehicle = function() --for some reason this marks one player as player on beammp server join
-    perfMod.playerSpawnProcessing = true
+core_levels.maybeLoadDefaultVehicle = function()
+
+    local isMPSession = MPCoreNetwork and MPCoreNetwork.isMPSession and MPCoreNetwork.isMPSession()
+    if not isMPSession then
+        perfMod.playerSpawnProcessing = true
+    end
+
     defaultVehOrig()
 end
-
 M.onGetRawPoiListForLevel = onGetRawPoiListForLevel
 
 M.levelsDir = '/levels/' -- backward compatibility

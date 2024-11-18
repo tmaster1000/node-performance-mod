@@ -3,35 +3,53 @@
 local stage2 = require("vehicle/jbeam/stage2")
 local abs = math.abs
 
+--new version, considers top 2 best candidates for shell node instead of previous top 1. Laggier but much better, still disables half the collision
 local function nodeCheck(nodeID, vehicle)
     local connectedNodes = {}
-    for _, beam in pairs(vehicle.beams) do
+    for i = 1, #vehicle.beams do
+        local beam = vehicle.beams[i]
         if beam.id1 == nodeID then
-            connectedNodes[beam.id2] = 1
-        else
-            if beam.id2 == nodeID then
-                connectedNodes[beam.id1] = 1
-            end
+            connectedNodes[beam.id2] = true
+        elseif beam.id2 == nodeID then
+            connectedNodes[beam.id1] = true
         end
     end
 
     local shellNode = {true, true, true}
-    for id, num in  pairs(connectedNodes) do
-        if abs(vehicle.nodes[nodeID].pos.x) < abs(vehicle.nodes[id].pos.x) then
-            shellNode[0] = false
-        end
+    local distances = {}
+    local function isAmongTopTwo(nodeID, axis)
+        for k in pairs(distances) do distances[k] = nil end -- Clear table
+        local nodePos = math.abs(vehicle.nodes[nodeID].pos[axis])
 
-        if abs(vehicle.nodes[nodeID].pos.y) < abs(vehicle.nodes[id].pos.y) then
-            shellNode[1] = false
+        for id in pairs(connectedNodes) do
+            table.insert(distances, math.abs(vehicle.nodes[id].pos[axis]))
         end
+        table.insert(distances, nodePos)
 
-        if abs(vehicle.nodes[nodeID].pos.z) < abs(vehicle.nodes[id].pos.z) then
-            shellNode[2] = false
+        table.sort(distances, function(a, b) return a > b end)
+
+        for i = 1, math.min(2, #distances) do
+            if nodePos == distances[i] then
+                vehicle.nodes[nodeID].highlight = true
+                return true
+            end
         end
+        return false
     end
 
-    return shellNode[0] or shellNode[1] or shellNode[2]
+    if not isAmongTopTwo(nodeID, "x") then
+        shellNode[1] = false
+    end
+    if not isAmongTopTwo(nodeID, "y") then
+        shellNode[2] = false
+    end
+    if not isAmongTopTwo(nodeID, "z") then
+        shellNode[3] = false
+    end
+
+    return shellNode[1] or shellNode[2] or shellNode[3]
 end
+
 
 
 do

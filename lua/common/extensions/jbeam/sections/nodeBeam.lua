@@ -9,54 +9,106 @@ local function simplifyWheels(vehicle)
     if vehicle["pressureWheels"] ~= nil then
     for k, v in pairs(vehicle["pressureWheels"]) do
 
-        local tireFactor = (v.radius - v.hubRadius) / v.radius --attempts to compensate for the missing tire
-        local hubFactor = 1 - tireFactor
+        --v.hasTire = true we fake a tire for later logic
+        v.brakeType = "vented-disc"
+        v.collision = true
+        v.disableHubMeshBreaking = false
+        v.disableMeshBreaking = false
+        v.enableBrakeThermals = false
+        v.enableTireLbeams = false
+        v.enableTirePeripheryReinfBeams = false
+        v.enableTireReinfBeams = false
+        v.enableTireSideReinfBeams = false
+        v.enableTreadReinfBeams = false
 
-
-        v.hasTire = false
+        v.hubBeamDeform = 75568.34375
+        v.hubBeamStrength = 85626
+        v.hubFrictionCoef = v.frictionCoef * 1.2
+        v.hubNodeMaterial = 4
+        v.hubNodeWeight = 0.65
+        v.hubPeripheryBeamDamp = 250
+        v.hubPeripheryBeamSpring = 401000
+        v.hubRadiusSimple = v.hubRadius
+        v.hubRadius = v.radius
+        v.hubReinfBeamDamp = 600
+        v.hubReinfBeamSpring = 651000
+        v.hubSideBeamDamp = 300
+        v.hubSideBeamSpring = 421000
+        -- v.hubTreadBeamDamp = 250
+        v.hubTreadBeamDamp = v.wheelTreadBeamDamp
+        -- v.hubTreadBeamSpring = 851000
+        v.hubTreadBeamSpring = v.wheelTreadBeamSpring
+        v.hubWidth = v.tireWidth
+        v.nodeS = 9999
         v.numRays = math.floor(v.numRays / 1.6 + 0.5)
         if v.numRays % 2 ~= 0 then
             v.numRays = v.numRays + 1
         end
-
-        v.triangleCollision = false
+        v.optional = true
+        v.padMaterial = "sport"
+        v.rotorMaterial = "steel"
+        --v.scaledragCoef = 2.15
+        --v.scalenodeWeight = 1.2
         v.selfCollision = false
+        --v.softnessCoef = 0.7
+        --v.treadCoef = 0.7
+        v.triangleCollision = false
 
-        v.hubRadiusSimple = v.hubRadius
-        v.hubRadius = v.radius
-        v.hubWidth = v.tireWidth
-        v.hubFrictionCoef = v.frictionCoef * 1.5
-        v.hubNodeMaterial = v.nodeMaterial
-        v.hubTreadBeamSpring = v.wheelTreadBeamSpring;
-        v.hubTreadBeamDamp = v.wheelTreadBeamDamp;
-
-        --constants taken from simplified bastion
-
-        v.hubSideBeamDeform = ((v.hubSideBeamDeform or 75568.343750) * hubFactor + (v.wheelSideBeamDeform or 75568.343750) * tireFactor) * 2
-        v.hubSideBeamStrength = ((v.hubSideBeamStrength or 85626.000000) * hubFactor + (v.wheelSideBeamStrength or 85626.000000) * tireFactor) * 2
-        v.hubSideBeamSpring = math.floor(((v.hubSideBeamSpring or 251000) * hubFactor + (v.wheelSideBeamSpring or 251000) * tireFactor) * 1)
-        v.hubSideBeamDamp = v.wheelSideBeamDamp * 1.5
-        v.hubPeripheryBeamSpring = ((v.hubPeripheryBeamSpring or 301000) * hubFactor + (v.wheelPeripheryBeamSpring or 301000) * tireFactor) * 2
-        v.hubPeripheryBeamDamp = ((v.hubPeripheryBeamDamp or 150) * hubFactor + (v.wheelPeripheryBeamDamp or 150) * tireFactor) * 2
-
-       v.hubReinfBeamSpring = v.wheelReinfBeamSpring
-       v.hubReinfBeamDamp = v.wheelReinfBeamDamp
-
-
-        v.hubNodeWeight = v.hubNodeWeight + v.nodeWeight
-
-        v.hubBeamDeform = 75568.343750
-        v.hubBeamStrength = 85626
-
+        v.breakGroup = nil
+        v.deformGroup = nil
+        v.dragCoef = nil
+        v.enableABS = false
+        v.enableHubcaps = false
+        v.frictionCoef = nil
+        v.fullLoadCoef = nil
+        v.loadSensitivitySlope = nil
+        v.noLoadCoef = nil
+        v.nodeMaterial = nil
+        v.nodeWeight = nil
+        v.padGlazingSusceptibility = nil
+        v.pressurePSI = nil
+        v.skinName = nil
+        v.slidingFrictionCoef = nil
+        v.squealCoefLowSpeed = nil
+        v.squealCoefNatural = nil
+        v.tireWidth = nil
+        v.wheelPeripheryBeamDamp = nil
+        v.wheelPeripheryBeamDampCutoffHz = nil
+        v.wheelPeripheryBeamDeform = nil
+        v.wheelPeripheryBeamPrecompression = nil
+        v.wheelPeripheryBeamSpring = nil
+        v.wheelPeripheryBeamStrength = nil
+        v.wheelPeripheryReinfBeamDamp = nil
+        v.wheelPeripheryReinfBeamDampCutoffHz = nil
+        v.wheelPeripheryReinfBeamPrecompression = nil
+        v.wheelPeripheryReinfBeamSpring = nil
+        v.wheelReinfBeamDamp = nil
+        v.wheelReinfBeamDampCutoffHz = nil
+        v.wheelReinfBeamPrecompression = nil
+        v.wheelReinfBeamSpring = nil
+        v.wheelSideBeamDamp = nil
+        v.wheelSideBeamDampExpansion = nil
+        v.wheelSideBeamDeform = nil
+        v.wheelSideBeamPrecompression = nil
+        v.wheelSideBeamSpring = nil
+        v.wheelSideBeamSpringExpansion = nil
+        v.wheelSideBeamStrength = nil
+        v.wheelSideTransitionZone = nil
+        v.wheelTreadBeamDamp = nil
+        v.wheelTreadBeamDampCutoffHz = nil
+        v.wheelTreadBeamDeform = nil
+        v.wheelTreadBeamPrecompression = nil
+        v.wheelTreadBeamSpring = nil
+        v.wheelTreadBeamStrength = nil
+        v.wheelTreadReinfBeamDamp = nil
+        v.wheelTreadReinfBeamDampCutoffHz = nil
+        v.wheelTreadReinfBeamPrecompression = nil
+        v.wheelTreadReinfBeamSpring = nil
     end
 
     else
         print("vehicle[pressureWheels] is nil")
     end
-
-
-
-
 
    -- for k in pairs(vehicle["beams"]) do
      --   if vehicle["beams"][k].beamType == 2 then
@@ -66,21 +118,13 @@ local function simplifyWheels(vehicle)
 
 end
 
-
-
-
-
 nodeBeam.process = function(vehicle)
-
     if perfMod.playerSpawnProcessing or perfMod.playerReloadProcessing then
-
-        print("Skipping wheel simplifying for player vehicle")
+      print("Skipping wheel simplifying for player vehicle")
     elseif perfMod.disableTires then
       simplifyWheels(vehicle)
       print("Simplified wheels")
     end
-
-
     originalProcess(vehicle)
 end
 

@@ -11,7 +11,7 @@ Options are in lua/ge/extensions/perfMod.lua:
 Current bugs: 
 1. Player can't tow trailers because of reduced collisions. Could be fixed by excluding the critical nodes from the modifications.
 2. **Incompatibility with the following mods**:
-   1. Scintilla GT3. Fixed on rigged servers but elsewhere this car is incompatible with reduceCollisions.
+   1. Scintilla GT3. Fixed on rigged servers but elsewhere this car is incompatible with disableTires.
    2. Very rarely cobalt radar. That mod has some missing nil-checks that sometimes throw a fatal exception. If this happens, just reload the affected vehicle with CTRL+R
 
 Performance comparison with unmodded game running 20 AI-driven covets on the Automation Test Track with 'High' graphics preset:

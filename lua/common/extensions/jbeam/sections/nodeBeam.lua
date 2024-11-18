@@ -23,23 +23,37 @@ local function simplifyWheels(vehicle)
 
         v.hubBeamDeform = 75568.34375
         v.hubBeamStrength = 85626
-        v.hubFrictionCoef = v.frictionCoef * 1.2
+        if v.frictionCoef ~= nil then
+            v.hubFrictionCoef = v.frictionCoef * 1.2
+        end
         v.hubNodeMaterial = 4
         v.hubNodeWeight = 0.65
         v.hubPeripheryBeamDamp = 250
         v.hubPeripheryBeamSpring = 401000
-        v.hubRadiusSimple = v.hubRadius
-        v.hubRadius = v.radius
+        if v.frictionCoef ~= nil then
+            v.hubRadiusSimple = v.hubRadius
+        end
+        if v.radius ~= nil then
+            v.hubRadius = v.radius
+        end
         v.hubReinfBeamDamp = 600
         v.hubReinfBeamSpring = 651000
         v.hubSideBeamDamp = 300
         v.hubSideBeamSpring = 421000
-        -- v.hubTreadBeamDamp = 250
-        v.hubTreadBeamDamp = v.wheelTreadBeamDamp
-        -- v.hubTreadBeamSpring = 851000
-        v.hubTreadBeamSpring = v.wheelTreadBeamSpring
-        v.hubWidth = v.tireWidth
+        if v.wheelTreadBeamDamp ~= nil then
+            v.hubTreadBeamDamp = v.wheelTreadBeamDamp
+        end
+
+        if v.wheelTreadBeamSpring ~= nil then
+            v.hubTreadBeamSpring = v.wheelTreadBeamSpring
+        end
+
+        if v.tireWidth ~= nil then
+            v.hubWidth = v.tireWidth
+        end
+
         v.nodeS = 9999
+
         v.numRays = math.floor(v.numRays / 1.6 + 0.5)
         if v.numRays % 2 ~= 0 then
             v.numRays = v.numRays + 1

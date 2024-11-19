@@ -111,6 +111,10 @@ local function onSpawnCCallback(objID)
     end
 end
 
+local function onLoadingScreenFadeout()
+    guihooks.trigger('toastrMsg', {type = "info", title = "Performance mod:", msg = "Remote vehicles will be optimized", config = {timeOut = 5000}})
+end
+
 function onLuaReloaded() -- LUA reloads will clear the table so we attempt to salvage something by setting player vehicle to the current vehicle
 
     local playerVehicleID = be:getPlayerVehicleID(0)
@@ -121,6 +125,8 @@ end
 
 M.onSpawnCCallback = onSpawnCCallback
 M.playerReloadCheck = playerReloadCheck
+
+M.onLoadingScreenFadeout = onLoadingScreenFadeout
 
 
 return M

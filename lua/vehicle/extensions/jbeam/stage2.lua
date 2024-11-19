@@ -30,7 +30,7 @@ local function nodeCheck(nodeID, vehicle)
 
         for i = 1, math.min(2, #distances) do
             if nodePos == distances[i] then
-                vehicle.nodes[nodeID].highlight = true
+                --vehicle.nodes[nodeID].highlight = true
                 return true
             end
         end

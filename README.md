@@ -22,8 +22,7 @@ Experimental, might cause desync but give the highest performance gain:
 Current bugs: 
 1. Player can't tow trailers because of reduced collisions. Could be fixed by excluding the critical nodes from the modifications.
 2. **Incompatibility with the following mods**:
-   1. Scintilla GT3. Fixed on rigged servers but elsewhere this car is incompatible with disableTires.
-   2. Very rarely cobalt radar. That mod has some missing nil-checks that sometimes throw a fatal exception. If this happens, just reload the affected vehicle with CTRL+R
+   1. Scintilla GT3. Fixed on rigged servers but elsewhere this car is incompatible with disableTires because it doesn't check if tires exist before extracting properties from them.
 
 Performance comparison with unmodded game running 20 AI-driven covets on the Automation Test Track with 'High' graphics preset. (**note, this was done with all options enabled**)
 ![image](https://github.com/user-attachments/assets/94d24680-cb86-4e64-a4c9-7c21b78207a4)

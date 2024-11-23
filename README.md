@@ -1,12 +1,24 @@
 This mod attempts to optimize remote vehicles for better BeamMP performance. For the player vehicle it disables collision with itself.
 
+
+**Important, read before using:**
+For BeamMP to work the best, the remote vehicle needs to be as similar as possible both in your game as in the game of the person driving it.
+This means that the wheel and aero modifications of this mod unfortunately can cause desync. The options labeled 'Safe to use' generally don't do this, as they only edit collisions and visual effects.
+Collision editing only causes desync in the event of someone crashing their vehicle, but the difference this makes for sync is negligible.
+
+
 Options are in lua/ge/extensions/perfMod.lua:
 
-1. M.reduceCollision REMOTE VEHICLES: disables collision for nodes not on the outer shell. PLAYER VEHICLE: disables collision with own nodes
-2. M.disablePropsLights REMOTE VEHICLES: disables headlight flares and all props except the wheel
-3. M.disableAero REMOTE VEHICLES: sets all aerodynamic parameters to 0
-4. M.disableTires REMOTE VEHICLES: removes tires and gives hubs tire-like properties
-5. M.disableParticles = REMOTE VEHICLES: disables collision-based particle effects
+**All the modifications only affect remove vehicles except reduceCollisions, which stops player vehicle colliding with itself. For remote vehicles it does heavier modifications**
+
+--Safe to use:
+M.reduceCollision = true -- Disables all collision for nodes not on the outer shell and self-collision for all nodes. Also disables player vehicle collision with own nodes.
+M.disablePropsLights = true Disables headlight flares and all props except the wheel. Note: doesn't disable headlight glow and some lights that are implemented differently. Highly recommended to leave this enabled.
+M.disableParticles = true Disables collision-based particle effects. Does not disable all particle effects
+
+--Experimental, might cause desync but give the highest performance gain:
+M.disableTires = true --REMOTE VEHICLES: removes tires and gives hubs tire-like properties **enabled by default but adds desync. Use at own risk**
+M.disableAero = false --REMOTE VEHICLES: sets all aerodynamic parameters to 0 **disabled by default. Adds desync**
 
 Current bugs: 
 1. Player can't tow trailers because of reduced collisions. Could be fixed by excluding the critical nodes from the modifications.

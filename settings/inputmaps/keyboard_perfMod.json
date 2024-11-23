@@ -1,0 +1,5 @@
+{
+  "bindings":[
+    {"control":"f10", "action":"togglePerfMod"}
+  ]
+}

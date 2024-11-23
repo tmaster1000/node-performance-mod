@@ -1,18 +1,17 @@
--- Credit: thrustermaster, (Discord) _N_S_ (BeamNG Forums), Unshown
+-- Credit: thrustermaster (Discord), _N_S_ (BeamNG Forums), Unshown
 --GE LUA player processing is marked with global variables, VE LUA vehicles are marked by setting vehicleConfig values
 
 local M = {}
 
---OPTIONS
+M.dependencies = {"ui_imgui"}
+local ui = ui_imgui
 
---Safe to use:
-M.reduceCollision = true -- REMOTE VEHICLES: disables all collision for nodes not on the outer shell and self-collision for all nodes. PLAYER VEHICLE: disables self-collision
-M.disablePropsLights = true --REMOTE VEHICLES: disables headlight flares and all props except the wheel. Doesn't disable the more special ones, WIP
-M.disableParticles = true --REMOTE VEHICLES: Disables collision-based particle effects. Does not disable all particle effects
-
---Experimental, might cause desync but give the highest performance gain:
-M.disableTires = true --REMOTE VEHICLES: removes tires and gives hubs tire-like properties
-M.disableAero = false --REMOTE VEHICLES: sets all aerodynamic parameters to 0
+-- Options controlled by checkboxes
+local reduceCollision = M.reduceCollision or true
+local disablePropsLights = M.disablePropsLights or true
+local disableParticles = M.disableParticles or true
+local disableTires = M.disableTires or false
+local disableAero = M.disableAero or false
 
 
 local playerVehicles = {}
@@ -48,7 +47,7 @@ end
 local function onSpawnCCallback(objID)
 
     if not isLoaded then --spaghetti solution because loading this as a dependency is too early - **THIS BREAKS LUA CTRL+L RELOADS, REMOVE IF MAKING EDITS**
-       extensions.load('partmgmt')
+       --extensions.load('partmgmt')
         isLoaded = true
     end
 
@@ -116,7 +115,7 @@ local function onSpawnCCallback(objID)
 end
 
 local function onLoadingScreenFadeout()
-    guihooks.trigger('toastrMsg', {type = "info", title = "Performance mod:", msg = "Remote vehicles will be optimized", config = {timeOut = 5000}})
+    guihooks.trigger('toastrMsg', {type = "info", title = "Performance Mod active", msg = "Press F10 for options", config = {timeOut = 5000}})
 end
 
 function onLuaReloaded() -- LUA reloads will clear the table so we attempt to salvage something by setting player vehicle to the current vehicle
@@ -127,10 +126,121 @@ function onLuaReloaded() -- LUA reloads will clear the table so we attempt to sa
     end
 end
 
+local function reloadAllVehicles()
+    core_vehicle_manager.reloadAllVehicles()
+end
+
+
+---IMGUI
+
+
+local showUI = ui.BoolPtr(false)
+
+local function renderUI()
+    ui.SetNextWindowSize(ui.ImVec2(500, 500), ui.Cond_FirstUseEver)
+    if ui.Begin("Performance Mod", showUI, ui.WindowFlags_AlwaysAutoResize) then
+        ui.Text("Optimize remote vehicles for more FPS")
+
+        local reduceCollisionPtr = ui.BoolPtr(reduceCollision)
+        if ui.Checkbox("Reduce Collisions", reduceCollisionPtr) then
+            reduceCollision = reduceCollisionPtr[0]
+            M.reduceCollision = reduceCollision
+        end
+        if ui.IsItemHovered() then
+            ui.BeginTooltip()
+            ui.Text("Reduces node collision for remote vehicles and disables collision with own nodes for all vehicles")
+            ui.EndTooltip()
+        end
+
+        local disablePropsLightsPtr = ui.BoolPtr(disablePropsLights)
+        if ui.Checkbox("Reduce Props and Lights", disablePropsLightsPtr) then
+            disablePropsLights = disablePropsLightsPtr[0]
+            M.disablePropsLights = disablePropsLights
+        end
+        if ui.IsItemHovered() then
+            ui.BeginTooltip()
+            ui.Text("Disables headlight flares and leaves headlight glow for remote vehicles ")
+            ui.EndTooltip()
+        end
+
+        local disableParticlesPtr = ui.BoolPtr(disableParticles)
+        if ui.Checkbox("Disable Collision Particles", disableParticlesPtr) then
+            disableParticles = disableParticlesPtr[0]
+            M.disableParticles = disableParticles
+        end
+
+        ui.Separator()
+        ui.Text("Experimental settings - can cause desync")
+        local disableTiresPtr = ui.BoolPtr(disableTires)
+        if ui.Checkbox("Disable Tires", disableTiresPtr) then
+            disableTires = disableTiresPtr[0]
+            M.disableTires = disableTires
+        end
+        if ui.IsItemHovered() then
+            ui.BeginTooltip()
+            ui.Text("Removes tires and gives hubs tire-like properties for remote vehicles")
+            ui.EndTooltip()
+        end
+        local disableAeroPtr = ui.BoolPtr(disableAero)
+        if ui.Checkbox("Disable Aerodynamics", disableAeroPtr) then
+            disableAero = disableAeroPtr[0]
+            M.disableAero = disableAero
+        end
+        if ui.IsItemHovered() then
+            ui.BeginTooltip()
+            ui.Text("Disables aerodynamics for remote vehicles")
+            ui.EndTooltip()
+        end
+        ui.Separator()
+        ui.Text("Changes will affect all spawned or reloaded cars")
+
+
+        ui.PushStyleColor2(ui.Col_Button, ui.ImVec4(1.0, 0.0, 0.0, 1.0))
+        ui.PushStyleColor2(ui.Col_ButtonHovered, ui.ImVec4(0.8, 0.0, 0.0, 1.0))
+        ui.PushStyleColor2(ui.Col_ButtonActive, ui.ImVec4(0.6, 0.0, 0.0, 1.0))
+
+        if ui.Button("Force Reload") then
+            reloadAllVehicles()
+        end
+
+        ui.PopStyleColor(3)
+
+    end
+    ui.End()
+end
+
+local function onUpdate()
+    if showUI[0] then
+        renderUI()
+    end
+end
+
+local function toggleUI()
+    showUI[0] = not showUI[0]
+end
+
+local function show()
+    showUI[0] = true
+end
+
+local function hide()
+    showUI[0] = false
+end
+
+M.onUpdate = onUpdate
+M.toggleUI = toggleUI
+M.show = show
+M.hide = hide
+
+M.reduceCollision = reduceCollision
+M.disablePropsLights = disablePropsLights
+M.disableParticles = disableParticles
+M.disableTires = disableTires
+M.disableAero = disableAero
+
 M.onSpawnCCallback = onSpawnCCallback
 M.playerReloadCheck = playerReloadCheck
 
 M.onLoadingScreenFadeout = onLoadingScreenFadeout
-
 
 return M

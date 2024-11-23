@@ -9,7 +9,6 @@ local ui = ui_imgui
 -- Options controlled by checkboxes
 local reduceCollision = M.reduceCollision or true
 local disablePropsLights = M.disablePropsLights or true
-local disableParticles = M.disableParticles or true
 local disableTires = M.disableTires or false
 local disableAero = M.disableAero or false
 
@@ -106,11 +105,6 @@ local function onSpawnCCallback(objID)
         else
             vehicleConfig_.isPlayerVehicle = true
         end
-
-        if M.disableParticles then
-            obj:queueLuaCommand("extensions.load('main')")
-        end
-
     end
 end
 
@@ -162,13 +156,6 @@ local function renderUI()
             ui.Text("Disables headlight flares and leaves headlight glow for remote vehicles ")
             ui.EndTooltip()
         end
-
-        local disableParticlesPtr = ui.BoolPtr(disableParticles)
-        if ui.Checkbox("Disable Collision Particles", disableParticlesPtr) then
-            disableParticles = disableParticlesPtr[0]
-            M.disableParticles = disableParticles
-        end
-
         ui.Separator()
         ui.Text("Experimental settings - can cause desync")
         local disableTiresPtr = ui.BoolPtr(disableTires)
@@ -192,7 +179,7 @@ local function renderUI()
             ui.EndTooltip()
         end
         ui.Separator()
-        ui.Text("Changes will affect all new or reloaded cars automatically")
+        ui.Text("Changes will affect all new or reloaded cars automatically - CTRL+SHIFT+R to force reload")
     end
     ui.End()
 end
@@ -222,7 +209,6 @@ M.hide = hide
 
 M.reduceCollision = reduceCollision
 M.disablePropsLights = disablePropsLights
-M.disableParticles = disableParticles
 M.disableTires = disableTires
 M.disableAero = disableAero
 

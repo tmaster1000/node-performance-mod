@@ -47,7 +47,7 @@ end
 local function onSpawnCCallback(objID)
 
     if not isLoaded then --spaghetti solution because loading this as a dependency is too early - **THIS BREAKS LUA CTRL+L RELOADS, REMOVE IF MAKING EDITS**
-       --extensions.load('partmgmt')
+       extensions.load('partmgmt')
         isLoaded = true
     end
 

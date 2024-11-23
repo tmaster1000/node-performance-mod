@@ -192,19 +192,7 @@ local function renderUI()
             ui.EndTooltip()
         end
         ui.Separator()
-        ui.Text("Changes will affect all spawned or reloaded cars")
-
-
-        ui.PushStyleColor2(ui.Col_Button, ui.ImVec4(1.0, 0.0, 0.0, 1.0))
-        ui.PushStyleColor2(ui.Col_ButtonHovered, ui.ImVec4(0.8, 0.0, 0.0, 1.0))
-        ui.PushStyleColor2(ui.Col_ButtonActive, ui.ImVec4(0.6, 0.0, 0.0, 1.0))
-
-        if ui.Button("Force Reload") then
-            reloadAllVehicles()
-        end
-
-        ui.PopStyleColor(3)
-
+        ui.Text("Changes will affect all new or reloaded cars automatically")
     end
     ui.End()
 end

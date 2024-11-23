@@ -29,12 +29,15 @@ meshs.process = function(objID, vehicleObj, vehicle)
 
     if perfMod.playerSpawnProcessing or perfMod.playerReloadProcessing then
         print("Skipping prop and aero removal for player vehicle")
-    elseif perfMod.disablePropsLights then
-        print("removing props")
-      removeProps(vehicle)
-    elseif perfMod.disableAero then
-        print("disabling aero")
-      disableAero(vehicle)
+    else
+        if perfMod.disablePropsLights then
+            print("removing props")
+            removeProps(vehicle)
+        end
+        if perfMod.disableAero then
+            print("disabling aero")
+            disableAero(vehicle)
+        end
     end
 
     perfMod.playerSpawnProcessing = false

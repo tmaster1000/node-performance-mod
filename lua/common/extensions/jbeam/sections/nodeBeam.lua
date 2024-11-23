@@ -59,8 +59,8 @@ local function simplifyWheels(vehicle)
             v.numRays = v.numRays + 1
         end
         v.optional = true
-        v.padMaterial = "sport"
-        v.rotorMaterial = "steel"
+        --v.padMaterial = "sport"
+        --v.rotorMaterial = "steel"
         --v.scaledragCoef = 2.15
         --v.scalenodeWeight = 1.2
         v.selfCollision = false

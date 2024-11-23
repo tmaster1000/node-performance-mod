@@ -10,7 +10,7 @@ local function simplifyWheels(vehicle)
     for k, v in pairs(vehicle["pressureWheels"]) do
 
         --v.hasTire = true we fake a tire for later logic
-        v.brakeType = "vented-disc"
+        --v.brakeType = "vented-disc"
         v.collision = true
         v.disableHubMeshBreaking = false
         v.disableMeshBreaking = false

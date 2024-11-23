@@ -3,13 +3,17 @@
 
 local M = {}
 
---options
-M.reduceCollision = true -- REMOTE VEHICLES: disables collision for nodes not on the outer shell. PLAYER VEHICLE: disables collision with own nodes
-M.disablePropsLights = true --REMOTE VEHICLES: disables headlight flares and all props except the wheel
-M.disableAero = true --REMOTE VEHICLES: sets all aerodynamic parameters to 0
+--OPTIONS
+
+--Safe to use:
+M.reduceCollision = true -- REMOTE VEHICLES: disables all collision for nodes not on the outer shell and self-collision for all nodes. PLAYER VEHICLE: disables self-collision
+M.disablePropsLights = true --REMOTE VEHICLES: disables headlight flares and all props except the wheel. Doesn't disable the more special ones, WIP
+M.disableParticles = true --REMOTE VEHICLES: Disables collision-based particle effects. Does not disable all particle effects
+
+--Experimental, might cause desync but give the highest performance gain:
 M.disableTires = true --REMOTE VEHICLES: removes tires and gives hubs tire-like properties
-M.disableParticles = true --REMOTE VEHICLES: Disables particle effects
-------------------------
+M.disableAero = false --REMOTE VEHICLES: sets all aerodynamic parameters to 0
+
 
 local playerVehicles = {}
 M.playerSpawnProcessing = false

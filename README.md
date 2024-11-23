@@ -23,6 +23,7 @@ Current bugs:
 1. Player can't tow trailers because of reduced collisions. Could be fixed by excluding the critical nodes from the modifications.
 2. **Incompatibility with the following mods**:
    1. Scintilla GT3. Fixed on rigged servers but elsewhere this car is incompatible with disableTires because it doesn't check if tires exist before extracting properties from them.
+-> set disableTires to false to fix this.
 
 Performance comparison with unmodded game running 20 AI-driven covets on the Automation Test Track with 'High' graphics preset. (**note, this was done with all options enabled**)
 ![image](https://github.com/user-attachments/assets/94d24680-cb86-4e64-a4c9-7c21b78207a4)

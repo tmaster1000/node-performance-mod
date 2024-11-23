@@ -14,7 +14,7 @@ local function simplifyWheels(vehicle)
         v.collision = true
         v.disableHubMeshBreaking = false
         v.disableMeshBreaking = false
-        v.enableBrakeThermals = false
+        --v.enableBrakeThermals = false
         v.enableTireLbeams = false
         v.enableTirePeripheryReinfBeams = false
         v.enableTireReinfBeams = false

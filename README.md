@@ -1,6 +1,5 @@
 This mod attempts to optimize remote vehicles for better BeamMP performance. For the player vehicle it disables collision with itself.
 
-
 **Important, read before using:**
 For BeamMP to work the best, the remote vehicle needs to be as similar as possible both in your game as in the game of the person driving it.
 This means that the wheel and aero modifications of this mod unfortunately can cause desync. The options labeled 'Safe to use' generally don't do this, as they only edit collisions and visual effects.
@@ -27,3 +26,5 @@ Current bugs:
 
 Performance comparison with unmodded game running 20 AI-driven covets on the Automation Test Track with 'High' graphics preset. (**note, this was done with all options enabled**)
 ![image](https://github.com/user-attachments/assets/94d24680-cb86-4e64-a4c9-7c21b78207a4)
+
+THIS MOD AND CODE IS PROTECTED BY THE GNU General Public License v3.0. Distributing closed source versions is strictly prohibited

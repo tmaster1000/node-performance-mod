@@ -8,7 +8,7 @@ local ui = ui_imgui
 
 -- Options controlled by checkboxes
 local reduceCollision = M.reduceCollision or true
-local disablePropsLights = M.disablePropsLights or true
+local disablePropsLights = M.disablePropsLights or false
 local disableTires = M.disableTires or false
 local disableAero = M.disableAero or false
 

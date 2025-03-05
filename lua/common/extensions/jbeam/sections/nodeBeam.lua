@@ -2,6 +2,7 @@
 --Injects into nodeBeam.lua to alter wheel generation. Done here instead of wheels.lua for convenience.
 local M = {}
 local nodeBeam = require("common/jbeam/sections/nodeBeam")
+local perfMod = require('ge/extensions/perfMod')
 local originalProcess = nodeBeam.process
 local originalProcessNodes = processNodes
 local abs = math.abs

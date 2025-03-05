@@ -1,5 +1,4 @@
 --Handles all player vehicle spawns/reloads except default vehicle spawn at scenario start (see levels.lua)
-
 local M = {}
 local spawnNewVehOrig = core_vehicles.spawnNewVehicle
 local replaceVehOrig = core_vehicles.replaceVehicle
@@ -7,6 +6,7 @@ local reloadVehOrig = core_vehicles.reloadVehicle
 local defaultVehOrig = core_vehicles.loadDefaultVehicle
 local cloneVehOrig = core_vehicles.cloneCurrent
 local destroyVehOrig = core_vehicles.onVehicleDestroyed
+local perfMod = require('perfMod')
 
 core_vehicles.spawnNewVehicle = function(model, opt)
     perfMod.playerSpawnProcessing = true

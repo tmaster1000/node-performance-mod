@@ -1,6 +1,7 @@
 local M = {}
 local setPartsOrig = core_vehicle_partmgmt.setPartsConfig
 local setConfigVarsOrig = core_vehicle_partmgmt.setConfigVars
+local perfMod = require('perfMod')
 
 core_vehicle_partmgmt.setPartsConfig = function(...) --parts changed
     perfMod.playerSpawnProcessing = true

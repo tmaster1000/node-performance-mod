@@ -2,6 +2,7 @@
 
 local M = {}
 local defaultVehOrig = core_levels.maybeLoadDefaultVehicle
+local perfMod = require('perfMod')
 
 core_levels.maybeLoadDefaultVehicle = function()
 

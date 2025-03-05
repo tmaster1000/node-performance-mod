@@ -1,5 +1,6 @@
 local M = {}
 local meshs = require("common/jbeam/sections/meshs")
+local perfMod = require('ge/extensions/perfMod')
 local originalProcess = meshs.process
 
 

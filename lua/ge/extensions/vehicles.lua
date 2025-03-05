@@ -10,32 +10,32 @@ local beamsharpPerformance = require('beamsharpPerformance')
 
 core_vehicles.spawnNewVehicle = function(model, opt)
     beamsharpPerformance.playerSpawnProcessing = true
-    spawnNewVehOrig(model, opt)
+    return spawnNewVehOrig(model, opt)
 end
 
 core_vehicles.replaceVehicle = function(model, opt, otherVeh)
     beamsharpPerformance.playerSpawnProcessing = true
-    replaceVehOrig(model, opt, otherVeh)
+    return replaceVehOrig(model, opt, otherVeh)
 end
 
 core_vehicles.reloadVehicle = function(playerid)
     beamsharpPerformance.playerReloadProcessing = true
-    reloadVehOrig(playerid)
+    return reloadVehOrig(playerid)
 end
 
 core_vehicles.onVehicleDestroyed = function(id)
     beamsharpPerformance.playerDestroyProcessing = id
-    destroyVehOrig(id)
+    return destroyVehOrig(id)
 end
 
 core_vehicles.loadDefaultVehicle = function(id)
     beamsharpPerformance.playerSpawnProcessing = true
-    defaultVehOrig(id)
+    return defaultVehOrig(id)
 end
 
 core_vehicles.cloneCurrent = function()
     beamsharpPerformance.playerSpawnProcessing = true
-    cloneVehOrig()
+    return cloneVehOrig()
 end
 
 --public interface

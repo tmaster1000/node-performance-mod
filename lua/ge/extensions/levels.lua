@@ -5,8 +5,7 @@ local defaultVehOrig = core_levels.maybeLoadDefaultVehicle
 local beamsharpPerformance = require('beamsharpPerformance')
 
 core_levels.maybeLoadDefaultVehicle = function()
-
-    local isMPSession = MPCoreNetwork and MPCoreNetwork.isMPSession and MPCoreNetwork.isMPSession()
+    local isMPSession = MPCoreNetwork and MPCoreNetwork.isMPSession()
     if not isMPSession then
         beamsharpPerformance.playerSpawnProcessing = true
     end

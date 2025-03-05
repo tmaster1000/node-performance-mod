@@ -1,5 +1,6 @@
 -- Credit: Anonymous275(GitHub), thrustermaster(Discord), _N_S_(BeamNG Forums)
 -- Injects into stage2.lua to modify node collision parameters
+local logtag = "beamsharpPerformance.stage2"
 local stage2 = require("vehicle/jbeam/stage2")
 local beamsharpPerformancestage2 = require("beamsharpPerformance/stage2")
 
@@ -35,7 +36,7 @@ do
                 debug.setupvalue(pushToPhysics, 1, processNodes)
                 return processNodes(vehicle)
             end)
-            print("selfCollision disabled for player")
+            log("I", logtag, "Disabled Self-Collision for player")
         else -- non player modifications
             debug.setupvalue(pushToPhysics, 1, function(vehicle)
 
@@ -58,7 +59,7 @@ do
                 debug.setupvalue(pushToPhysics, 1, processNodes)
                 return processNodes(vehicle)
             end)
-            print("Collision limited for non-player")
+            log("I", logtag, "Optimized Collisions for none player")
         end
         return loadVehicleStage2(v)
     end

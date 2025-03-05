@@ -1,8 +1,8 @@
 local M = {}
 local meshs = require("common/jbeam/sections/meshs")
 local beamsharpPerformance = require('ge/extensions/beamsharpPerformance')
+local logtag = "beamsharpPerformance.meshs"
 local originalProcess = meshs.process
-
 
 local function removeProps(vehicle)
     if vehicle.props == nil then return end
@@ -25,18 +25,17 @@ local function disableAero(vehicle)
     end
 end
 
-
 meshs.process = function(objID, vehicleObj, vehicle)
 
     if beamsharpPerformance.playerSpawnProcessing or beamsharpPerformance.playerReloadProcessing then
-        print("Skipping prop and aero removal for player vehicle")
+        log("I", logtag, "Skipping prop and aero removal for player vehicle")
     else
         if beamsharpPerformance.disablePropsLights then
-            print("removing props")
+            log("I", logtag, "Removing PropsLights from Vehicle")
             removeProps(vehicle)
         end
         if beamsharpPerformance.disableAero then
-            print("disabling aero")
+            log("I", logtag, "Disabling Aero from Vehicle")
             disableAero(vehicle)
         end
     end
@@ -46,7 +45,6 @@ meshs.process = function(objID, vehicleObj, vehicle)
 
     originalProcess(objID, vehicleObj, vehicle)
 end
-
 
 M.process = meshs.process
 

@@ -120,7 +120,7 @@ local function simplifyWheels(vehicle)
             v.wheelTreadReinfBeamSpring = nil
         end
     else
-        print("vehicle[pressureWheels] is nil")
+        log("I", logtag, "vehicle[pressureWheels] is nil")
     end
 
     -- for k in pairs(vehicle["beams"]) do

@@ -1,3 +1,3 @@
 {
-    "togglePerfMod"     :{"cat":"debug", "order": 128, "ctx": "tlua", "onDown"  :"extensions.perfMod.toggleUI()", "actionMap": "Global", "title": "Toggle Performance Settings", "desc": "Runs Performance Mod option menu" }
+    "togglebeamsharpPerformance"     :{"cat":"debug", "order": 128, "ctx": "tlua", "onDown"  :"extensions.beamsharpPerformance.toggleUI()", "actionMap": "Global", "title": "Toggle Performance Settings", "desc": "Runs Performance Mod option menu" }
 }

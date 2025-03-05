@@ -2,7 +2,7 @@
 --Injects into nodeBeam.lua to alter wheel generation. Done here instead of wheels.lua for convenience.
 local M = {}
 local nodeBeam = require("common/jbeam/sections/nodeBeam")
-local perfMod = require('ge/extensions/perfMod')
+local beamsharpPerformance = require('ge/extensions/beamsharpPerformance')
 local originalProcess = nodeBeam.process
 local originalProcessNodes = processNodes
 local abs = math.abs
@@ -134,9 +134,9 @@ local function simplifyWheels(vehicle)
 end
 
 nodeBeam.process = function(vehicle)
-    if perfMod.playerSpawnProcessing or perfMod.playerReloadProcessing then
+    if beamsharpPerformance.playerSpawnProcessing or beamsharpPerformance.playerReloadProcessing then
       print("Skipping wheel simplifying for player vehicle")
-    elseif perfMod.disableTires then
+    elseif beamsharpPerformance.disableTires then
       simplifyWheels(vehicle)
       print("Simplified wheels")
     end

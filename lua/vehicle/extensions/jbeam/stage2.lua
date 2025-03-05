@@ -1,7 +1,7 @@
 -- Credit: Anonymous275(GitHub), thrustermaster(Discord), _N_S_(BeamNG Forums)
 -- Injects into stage2.lua to modify node collision parameters
 local stage2 = require("vehicle/jbeam/stage2")
-local perfmodstage2 = require("perfMod/stage2")
+local beamsharpPerformancestage2 = require("beamsharpPerformance/stage2")
 
 do
     local loadVehicleStage2 = stage2.loadVehicleStage2
@@ -45,7 +45,7 @@ do
 
                 for _, node in pairs(vehicle.nodes) do
 
-                    if node.wheelID ~= nil or perfmodstage2.nodeCheck(node.cid, vehicle) == true then
+                    if node.wheelID ~= nil or beamsharpPerformancestage2.nodeCheck(node.cid, vehicle) == true then
                         goto continue
                     end
                     node.collision = false

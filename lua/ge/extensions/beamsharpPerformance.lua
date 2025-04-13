@@ -2,17 +2,15 @@
 --GE LUA player processing is marked with global variables, VE LUA vehicles are marked by setting vehicleConfig values
 
 local M = {}
-
+local settingsPath = '/settings/nodePerformance.json'
 M.dependencies = { "ui_imgui" }
 local logtag = "nodePerformanceMod"
 local ui = ui_imgui
 
--- Options controlled by checkboxes
 local reduceCollision = M.reduceCollision or true
 local disablePropsLights = M.disablePropsLights or false
 local disableTires = M.disableTires or false
 local disableAero = M.disableAero or false
-
 
 local playerVehicles = {}
 M.playerSpawnProcessing = false
@@ -101,6 +99,11 @@ local function onSpawnCCallback(objID)
     end
 end
 
+local function onExtensionLoaded()
+    settingsLoad()
+end
+
+
 local function onLoadingScreenFadeout()
     guihooks.trigger('toastrMsg',
         { type = "info", title = "Performance Mod active", msg = "Press F10 for options", config = { timeOut = 5000 } })
@@ -117,6 +120,40 @@ local function reloadAllVehicles()
     core_vehicle_manager.reloadAllVehicles()
 end
 
+local function settingsSave()
+    local s = {
+        reduceCollision = reduceCollision,
+        disablePropsLights = disablePropsLights,
+        disableTires = disableTires,
+        disableAero = disableAero
+    }
+    jsonWriteFile(settingsPath, s, true)
+end
+
+local function settingsLoad()
+    local s = jsonReadFile(settingsPath)
+    if s then
+        if s.reduceCollision ~= nil then
+            reduceCollision = s.reduceCollision
+            M.reduceCollision = reduceCollision
+        end
+        if s.disablePropsLights ~= nil then
+            disablePropsLights = s.disablePropsLights
+            M.disablePropsLights = disablePropsLights
+        end
+        if s.disableTires ~= nil then
+            disableTires = s.disableTires
+            M.disableTires = disableTires
+        end
+        if s.disableAero ~= nil then
+            disableAero = s.disableAero
+            M.disableAero = disableAero
+        end
+    else
+        log("I", logtag, "No saved settings found, using defaults.")
+    end
+end
+
 ---IMGUI
 local showUI = ui.BoolPtr(false)
 
@@ -129,6 +166,7 @@ local function renderUI()
         if ui.Checkbox("Reduce Collisions", reduceCollisionPtr) then
             reduceCollision = reduceCollisionPtr[0]
             M.reduceCollision = reduceCollision
+            settingsSave()
         end
         if ui.IsItemHovered() then
             ui.BeginTooltip()
@@ -140,6 +178,7 @@ local function renderUI()
         if ui.Checkbox("Reduce Props and Lights", disablePropsLightsPtr) then
             disablePropsLights = disablePropsLightsPtr[0]
             M.disablePropsLights = disablePropsLights
+            settingsSave()
         end
         if ui.IsItemHovered() then
             ui.BeginTooltip()
@@ -152,6 +191,7 @@ local function renderUI()
         if ui.Checkbox("Disable Tires", disableTiresPtr) then
             disableTires = disableTiresPtr[0]
             M.disableTires = disableTires
+            settingsSave()
         end
         if ui.IsItemHovered() then
             ui.BeginTooltip()
@@ -162,6 +202,7 @@ local function renderUI()
         if ui.Checkbox("Disable Aerodynamics", disableAeroPtr) then
             disableAero = disableAeroPtr[0]
             M.disableAero = disableAero
+            settingsSave()
         end
         if ui.IsItemHovered() then
             ui.BeginTooltip()
@@ -191,6 +232,8 @@ end
 local function hide()
     showUI[0] = false
 end
+
+M.onExtensionLoaded = onExtensionLoaded
 
 M.onUpdate = onUpdate
 M.toggleUI = toggleUI

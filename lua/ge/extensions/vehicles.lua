@@ -7,7 +7,7 @@ local reloadVehOrig = core_vehicles.reloadVehicle
 local defaultVehOrig = core_vehicles.loadDefaultVehicle
 local cloneVehOrig = core_vehicles.cloneCurrent
 local destroyVehOrig = core_vehicles.onVehicleDestroyed
-local nodePerformanceMod = require('nodePerformanceMod')
+
 
 core_vehicles.spawnNewVehicle = function(model, opt)
     nodePerformanceMod.playerSpawnProcessing = true

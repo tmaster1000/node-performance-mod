@@ -2,7 +2,7 @@
 local M = {}
 local setPartsOrig = core_vehicle_partmgmt.setPartsConfig
 local setConfigVarsOrig = core_vehicle_partmgmt.setConfigVars
-local nodePerformanceMod = require('nodePerformanceMod')
+
 
 core_vehicle_partmgmt.setPartsConfig = function(...) --parts changed
     nodePerformanceMod.playerSpawnProcessing = true

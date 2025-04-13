@@ -3,7 +3,7 @@
 local M = {}
 local logtag = "nodePerformanceMod.nodeBeam"
 local nodeBeam = require("common/jbeam/sections/nodeBeam")
-local nodePerformanceMod = require('ge/extensions/nodePerformanceMod')
+
 local originalProcess = nodeBeam.process
 
 local function simplifyWheels(vehicle)

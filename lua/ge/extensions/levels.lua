@@ -3,7 +3,7 @@
 
 local M = {}
 local defaultVehOrig = core_levels.maybeLoadDefaultVehicle
-local nodePerformanceMod = require('nodePerformanceMod')
+
 
 core_levels.maybeLoadDefaultVehicle = function()
     local isMPSession = MPCoreNetwork and MPCoreNetwork.isMPSession()

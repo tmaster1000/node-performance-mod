@@ -11,6 +11,7 @@ local reduceCollision = M.reduceCollision or true
 local disablePropsLights = M.disablePropsLights or false
 local disableTires = M.disableTires or false
 local disableAero = M.disableAero or false
+local disableParticles = M.disableParticles or false
 
 local playerVehicles = {}
 M.playerSpawnProcessing = false
@@ -96,6 +97,7 @@ local function onSpawnCCallback(objID)
         M.playerReloadProcessing = false
         --print("NPC spawned or reloaded: " .. objID)
         vehicleConfig_.isPlayerVehicle = not M.reduceCollision
+        obj:queueLuaCommand("particlefilter.setSkipNodeCollision(" .. tostring(M.disableParticles) .. ")")
     end
 end
 
@@ -120,7 +122,8 @@ local function settingsSave()
         reduceCollision = reduceCollision,
         disablePropsLights = disablePropsLights,
         disableTires = disableTires,
-        disableAero = disableAero
+        disableAero = disableAero,
+        disableParticles = disableParticles
     }
     jsonWriteFile(settingsPath, s, true)
 end
@@ -143,6 +146,10 @@ local function settingsLoad()
         if s.disableAero ~= nil then
             disableAero = s.disableAero
             M.disableAero = disableAero
+        end
+        if s.disableParticles ~= nil then
+           disableParticles = s.disableParticles
+            M.disableParticles = disableParticles
         end
     else
         log("I", logtag, "No saved settings found, using defaults.")
@@ -180,6 +187,17 @@ local function renderUI()
             ui.Text("Disables headlight flares and leaves headlight glow for remote vehicles ")
             ui.EndTooltip()
         end
+       local disableParticlesPtr = ui.BoolPtr(disableParticles)
+         if ui.Checkbox("Disable Collision Particles", disableParticlesPtr) then
+             disableParticles = disableParticlesPtr[0]
+             M.disableParticles = disableParticles
+             settingsSave()
+         end
+         if ui.IsItemHovered() then
+             ui.BeginTooltip()
+             ui.Text("Disables collision particles for remote vehicles")
+             ui.EndTooltip()
+         end
         ui.Separator()
         ui.Text("Experimental settings - can cause desync")
         local disableTiresPtr = ui.BoolPtr(disableTires)
@@ -238,7 +256,7 @@ M.onUpdate = onUpdate
 M.toggleUI = toggleUI
 M.show = show
 M.hide = hide
-
+M.disableParticles = disableParticles
 M.reduceCollision = reduceCollision
 M.disablePropsLights = disablePropsLights
 M.disableTires = disableTires

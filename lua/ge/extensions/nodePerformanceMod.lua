@@ -99,11 +99,6 @@ local function onSpawnCCallback(objID)
     end
 end
 
-local function onExtensionLoaded()
-    settingsLoad()
-end
-
-
 local function onLoadingScreenFadeout()
     guihooks.trigger('toastrMsg',
         { type = "info", title = "Performance Mod active", msg = "Press F10 for options", config = { timeOut = 5000 } })
@@ -231,6 +226,10 @@ end
 
 local function hide()
     showUI[0] = false
+end
+
+local function onExtensionLoaded()
+    settingsLoad()
 end
 
 M.onExtensionLoaded = onExtensionLoaded

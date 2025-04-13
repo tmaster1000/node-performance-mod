@@ -7,7 +7,7 @@ Collision editing only causes desync in the event of someone crashing their vehi
 
 **All the modifications only affect remove vehicles except reduceCollisions, which stops player vehicle colliding with itself. For remote vehicles it does heavier modifications**
 
-Options are in lua/ge/extensions/beamsharpPerformance.lua:
+Options are in lua/ge/extensions/nodePerformanceMod.lua:
 
 Safe to use:
 1. M.reduceCollision = true -> Disables all collision for nodes not on the outer shell and self-collision for all nodes. Also disables player vehicle collision with own nodes.

@@ -1,5 +1,5 @@
 {
   "bindings":[
-    {"control":"f10", "action":"togglebeamsharpPerformance"}
+    {"control":"f10", "action":"togglenodePerformanceMod"}
   ]
 }

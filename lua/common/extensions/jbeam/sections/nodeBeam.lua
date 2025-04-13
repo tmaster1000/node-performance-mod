@@ -1,9 +1,9 @@
 --Credit:  thrustermaster (Discord)
 --Injects into nodeBeam.lua to alter wheel generation. Done here instead of wheels.lua for convenience.
 local M = {}
-local logtag = "beamsharpPerformance.nodeBeam"
+local logtag = "nodePerformanceMod.nodeBeam"
 local nodeBeam = require("common/jbeam/sections/nodeBeam")
-local beamsharpPerformance = require('ge/extensions/beamsharpPerformance')
+local nodePerformanceMod = require('ge/extensions/nodePerformanceMod')
 local originalProcess = nodeBeam.process
 
 local function simplifyWheels(vehicle)
@@ -131,7 +131,7 @@ local function simplifyWheels(vehicle)
 end
 
 nodeBeam.process = function(vehicle)
-    if beamsharpPerformance.disableTires and not beamsharpPerformance.playerSpawnProcessing and not beamsharpPerformance.playerReloadProcessing then
+    if nodePerformanceMod.disableTires and not nodePerformanceMod.playerSpawnProcessing and not nodePerformanceMod.playerReloadProcessing then
         simplifyWheels(vehicle)
         log("I", logtag, "Simplified Wheels for Vehicle")
     end

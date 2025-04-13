@@ -1,15 +1,15 @@
 local M = {}
 local setPartsOrig = core_vehicle_partmgmt.setPartsConfig
 local setConfigVarsOrig = core_vehicle_partmgmt.setConfigVars
-local beamsharpPerformance = require('beamsharpPerformance')
+local nodePerformanceMod = require('nodePerformanceMod')
 
 core_vehicle_partmgmt.setPartsConfig = function(...) --parts changed
-    beamsharpPerformance.playerSpawnProcessing = true
+    nodePerformanceMod.playerSpawnProcessing = true
     setPartsOrig(...)
 end
 
 core_vehicle_partmgmt.setConfigVars = function(...) --tuning changed
-    beamsharpPerformance.playerSpawnProcessing = true
+    nodePerformanceMod.playerSpawnProcessing = true
     setConfigVarsOrig(...)
 end
 

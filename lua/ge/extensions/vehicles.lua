@@ -6,35 +6,35 @@ local reloadVehOrig = core_vehicles.reloadVehicle
 local defaultVehOrig = core_vehicles.loadDefaultVehicle
 local cloneVehOrig = core_vehicles.cloneCurrent
 local destroyVehOrig = core_vehicles.onVehicleDestroyed
-local beamsharpPerformance = require('beamsharpPerformance')
+local nodePerformanceMod = require('nodePerformanceMod')
 
 core_vehicles.spawnNewVehicle = function(model, opt)
-    beamsharpPerformance.playerSpawnProcessing = true
+    nodePerformanceMod.playerSpawnProcessing = true
     return spawnNewVehOrig(model, opt)
 end
 
 core_vehicles.replaceVehicle = function(model, opt, otherVeh)
-    beamsharpPerformance.playerSpawnProcessing = true
+    nodePerformanceMod.playerSpawnProcessing = true
     return replaceVehOrig(model, opt, otherVeh)
 end
 
 core_vehicles.reloadVehicle = function(playerid)
-    beamsharpPerformance.playerReloadProcessing = true
+    nodePerformanceMod.playerReloadProcessing = true
     return reloadVehOrig(playerid)
 end
 
 core_vehicles.onVehicleDestroyed = function(id)
-    beamsharpPerformance.playerDestroyProcessing = id
+    nodePerformanceMod.playerDestroyProcessing = id
     return destroyVehOrig(id)
 end
 
 core_vehicles.loadDefaultVehicle = function(id)
-    beamsharpPerformance.playerSpawnProcessing = true
+    nodePerformanceMod.playerSpawnProcessing = true
     return defaultVehOrig(id)
 end
 
 core_vehicles.cloneCurrent = function()
-    beamsharpPerformance.playerSpawnProcessing = true
+    nodePerformanceMod.playerSpawnProcessing = true
     return cloneVehOrig()
 end
 

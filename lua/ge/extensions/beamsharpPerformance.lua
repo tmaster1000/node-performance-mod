@@ -4,7 +4,7 @@
 local M = {}
 
 M.dependencies = { "ui_imgui" }
-local logtag = "beamsharpPerformance"
+local logtag = "nodePerformanceMod"
 local ui = ui_imgui
 
 -- Options controlled by checkboxes

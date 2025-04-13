@@ -1,2 +1,2 @@
-load('beamsharpPerformance')
-setExtensionUnloadMode('beamsharpPerformance', 'manual')
+load('nodePerformanceMod')
+setExtensionUnloadMode('nodePerformanceMod', 'manual')

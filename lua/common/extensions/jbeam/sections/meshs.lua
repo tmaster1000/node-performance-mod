@@ -31,11 +31,11 @@ meshs.process = function(objID, vehicleObj, vehicle)
         log("I", logtag, "Skipping prop and aero removal for player vehicle")
     else
         if nodePerformanceMod.disablePropsLights then
-            log("I", logtag, "Removing PropsLights from Vehicle")
+            log("I", logtag, "Removing PropsLights from remote vehicle")
             removeProps(vehicle)
         end
         if nodePerformanceMod.disableAero then
-            log("I", logtag, "Disabling Aero from Vehicle")
+            log("I", logtag, "Disabling Aero for remote vehicle")
             disableAero(vehicle)
         end
     end

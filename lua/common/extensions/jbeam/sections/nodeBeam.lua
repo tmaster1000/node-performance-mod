@@ -133,7 +133,7 @@ end
 nodeBeam.process = function(vehicle)
     if nodePerformanceMod.disableTires and not nodePerformanceMod.playerSpawnProcessing and not nodePerformanceMod.playerReloadProcessing then
         simplifyWheels(vehicle)
-        log("I", logtag, "Simplified Wheels for Vehicle")
+        log("I", logtag, "Simplified Wheels for remote vehicle")
     end
 
     originalProcess(vehicle)

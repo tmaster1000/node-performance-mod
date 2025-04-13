@@ -2,7 +2,7 @@
 --Injects into stage2.lua to modify node collision parameters
 local stage2 = require("vehicle/jbeam/stage2")
 local abs = math.abs
-
+local logtag = "nodePerformanceMod.meshs"
 --new version, considers top 2 best candidates for shell node instead of previous top 1. Laggier but much better, still disables half the collision
 local function nodeCheck(nodeID, vehicle)
     local connectedNodes = {}

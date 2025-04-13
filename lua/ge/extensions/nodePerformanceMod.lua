@@ -12,6 +12,7 @@ local disablePropsLights = M.disablePropsLights or false
 local disableTires = M.disableTires or false
 local disableAero = M.disableAero or false
 local disableParticles = M.disableParticles or false
+local limitNumrays = M.limitNumrays or false
 
 local playerVehicles = {}
 M.playerSpawnProcessing = false
@@ -123,7 +124,8 @@ local function settingsSave()
         disablePropsLights = disablePropsLights,
         disableTires = disableTires,
         disableAero = disableAero,
-        disableParticles = disableParticles
+        disableParticles = disableParticles,
+        limitNumrays =  limitNumrays
     }
     jsonWriteFile(settingsPath, s, true)
 end
@@ -150,6 +152,10 @@ local function settingsLoad()
         if s.disableParticles ~= nil then
            disableParticles = s.disableParticles
             M.disableParticles = disableParticles
+        end
+        if s.limitNumrays ~= nil then
+           limitNumrays = s.limitNumrays
+            M.limitNumrays = limitNumrays
         end
     else
         log("I", logtag, "No saved settings found, using defaults.")
@@ -200,15 +206,15 @@ local function renderUI()
          end
         ui.Separator()
         ui.Text("Experimental settings - can cause desync")
-        local disableTiresPtr = ui.BoolPtr(disableTires)
-        if ui.Checkbox("Disable Tires", disableTiresPtr) then
-            disableTires = disableTiresPtr[0]
-            M.disableTires = disableTires
+        local limitNumraysPtr = ui.BoolPtr(limitNumrays)
+        if ui.Checkbox("Limit wheel complexity", limitNumraysPtr) then
+            limitNumrays = limitNumraysPtr[0]
+            M.limitNumrays = limitNumrays
             settingsSave()
         end
         if ui.IsItemHovered() then
             ui.BeginTooltip()
-            ui.Text("Removes tires and gives hubs tire-like properties for remote vehicles")
+            ui.Text("Reduces wheel complexity for remote vehicles")
             ui.EndTooltip()
         end
         local disableAeroPtr = ui.BoolPtr(disableAero)
@@ -220,6 +226,17 @@ local function renderUI()
         if ui.IsItemHovered() then
             ui.BeginTooltip()
             ui.Text("Disables aerodynamics for remote vehicles")
+            ui.EndTooltip()
+        end
+        local disableTiresPtr = ui.BoolPtr(disableTires)
+        if ui.Checkbox("Disable Tires (for desperate people)", disableTiresPtr) then
+            disableTires = disableTiresPtr[0]
+            M.disableTires = disableTires
+            settingsSave()
+        end
+        if ui.IsItemHovered() then
+            ui.BeginTooltip()
+            ui.Text("Removes tires and gives hubs tire-like properties for remote vehicles")
             ui.EndTooltip()
         end
         ui.Separator()

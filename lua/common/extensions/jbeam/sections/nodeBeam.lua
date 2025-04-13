@@ -129,11 +129,32 @@ local function simplifyWheels(vehicle)
     ---   end
     -- end
 end
+local function limitNumrays(vehicle)
+    if vehicle["pressureWheels"] ~= nil then
+    for k, v in pairs(vehicle["pressureWheels"]) do
+        if v.numRays > 10 then
+            local half = math.floor(v.numRays / 2)
+            if half < 10 then
+                half = 10
+            end
+            v.numRays = half
+        end
+    end
+    else
+        log("I", logtag, "vehicle[pressureWheels] is nil")
+    end
+end
+
 
 nodeBeam.process = function(vehicle)
     if nodePerformanceMod.disableTires and not nodePerformanceMod.playerSpawnProcessing and not nodePerformanceMod.playerReloadProcessing then
         simplifyWheels(vehicle)
         log("I", logtag, "Simplified Wheels for remote vehicle")
+    end
+
+    if nodePerformanceMod.limitNumrays and not nodePerformanceMod.disableTires and not nodePerformanceMod.playerSpawnProcessing and not nodePerformanceMod.playerReloadProcessing then
+        limitNumrays(vehicle)
+        log("I", logtag, "Limited rays for remote vehicle")
     end
 
     originalProcess(vehicle)

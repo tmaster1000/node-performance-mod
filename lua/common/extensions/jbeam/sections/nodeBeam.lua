@@ -1,4 +1,4 @@
---Credit:  thrustermaster (Discord)
+--Credit: tmaster1000(GitHub) / thrustermaster (Discord)
 --Injects into nodeBeam.lua to alter wheel generation. Done here instead of wheels.lua for convenience.
 local M = {}
 local logtag = "nodePerformanceMod.nodeBeam"

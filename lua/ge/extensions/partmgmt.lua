@@ -1,3 +1,4 @@
+--Credit: tmaster1000(GitHub) / thrustermaster (Discord)
 local M = {}
 local setPartsOrig = core_vehicle_partmgmt.setPartsConfig
 local setConfigVarsOrig = core_vehicle_partmgmt.setConfigVars

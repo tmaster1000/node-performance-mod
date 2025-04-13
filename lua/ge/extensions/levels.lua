@@ -1,3 +1,4 @@
+--Credit: tmaster1000(GitHub) / thrustermaster (Discord)
  --Marks default vehicle processing on scenario starts
 
 local M = {}

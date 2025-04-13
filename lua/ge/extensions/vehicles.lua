@@ -1,3 +1,4 @@
+--Credit: tmaster1000(GitHub) / thrustermaster (Discord), Unshown
 --Handles all player vehicle spawns/reloads except default vehicle spawn at scenario start (see levels.lua)
 local M = {}
 local spawnNewVehOrig = core_vehicles.spawnNewVehicle

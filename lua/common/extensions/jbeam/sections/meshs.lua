@@ -1,3 +1,4 @@
+--Credit: tmaster1000(GitHub) / thrustermaster (Discord)
 local M = {}
 local meshs = require("common/jbeam/sections/meshs")
 local nodePerformanceMod = require('ge/extensions/nodePerformanceMod')

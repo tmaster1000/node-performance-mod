@@ -1,4 +1,4 @@
--- Credit: thrustermaster (Discord), _N_S_ (BeamNG Forums), Unshown
+-- Credit: tmaster1000(GitHub) / thrustermaster (Discord), _N_S_ (BeamNG Forums), Unshown
 --GE LUA player processing is marked with global variables, VE LUA vehicles are marked by setting vehicleConfig values
 
 local M = {}

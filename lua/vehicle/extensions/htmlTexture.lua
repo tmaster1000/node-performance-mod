@@ -1,3 +1,5 @@
+--Credit: tmaster1000(GitHub) / thrustermaster (Discord)
+--disables all vehicle HTML. Probably should make this optional, unsure if gives any fps gains.
 local htmlTexture = require("vehicle/htmlTexture")
 local newOrig = htmlTexture.new
 local createOrig = htmlTexture.create

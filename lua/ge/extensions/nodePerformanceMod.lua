@@ -3,7 +3,7 @@
 
 local M = {}
 local settingsPath = '/settings/nodePerformance.json'
-M.dependencies = { "ui_imgui" }
+M.dependencies = { "ui_imgui", "vehicles", "levels" }
 local logtag = "nodePerformanceMod"
 local ui = ui_imgui
 
@@ -13,13 +13,84 @@ local disableTires = M.disableTires or false
 local disableAero = M.disableAero or false
 local disableParticles = M.disableParticles or false
 local limitNumrays = M.limitNumrays or false
+local disableMapLights   = M.disableMapLights   or false
 
 local playerVehicles = {}
 M.playerSpawnProcessing = false
 M.playerReloadProcessing = false
 M.playerDestroyProcessing = nil
-M.dependencies = { "vehicles", 'levels' }
+
 local isLoaded = false
+
+local removedLights = {}
+
+local function getFields(objectId)
+    local obj = Sim.findObjectById(objectId)
+    if obj then
+        return obj:getFieldsForEditor()
+    end
+    return nil
+end
+
+local function removeMapLights()
+    removedLights = {}
+
+    local function recurse(grp)
+        grp = Sim.upcast(grp)
+        if not grp then return end
+
+        for i = grp:size() - 1, 0, -1 do
+            local child = grp:at(i)
+            if not child then
+                -- nothing
+            else
+                local cid = child:getID()
+                local fields = getFields(cid)
+
+                if fields then
+
+                    local hasLightGroup = false
+                    for _, finfo in pairs(fields) do
+                        if finfo.groupName == "Light" then
+                            hasLightGroup = true
+                            break
+                        end
+                    end
+
+                    if hasLightGroup then
+
+                        local dump = "[" .. child:serializeForEditor(true, -1, "") .. "]"
+                        table.insert(removedLights, {
+                            json     = dump,
+                            parentID = grp:getID(),
+                            forcedID = cid,
+                        })
+                        child:deleteObject()
+                    elseif child:isSubClassOf("SimSet") then
+                        recurse(child)
+                    end
+                elseif child:isSubClassOf("SimSet") then
+                    recurse(child)
+                end
+            end
+        end
+    end
+
+    recurse(Sim.getRootGroup())
+end
+
+local function restoreMapLights()
+    for _, info in ipairs(removedLights) do
+        SimObject.setForcedId(info.forcedID)
+        local parent = scenetree.findObjectById(info.parentID)
+        Sim.deserializeObjectsFromText(info.json, true, true)
+    end
+    removedLights = {}
+end
+
+local function toggleMapLights(off)
+    if off then removeMapLights() else restoreMapLights() end
+end
 
 local function isPlayerVehicle(objID)
     if playerVehicles == nil or type(playerVehicles) ~= "table" then
@@ -125,7 +196,8 @@ local function settingsSave()
         disableTires = disableTires,
         disableAero = disableAero,
         disableParticles = disableParticles,
-        limitNumrays =  limitNumrays
+        limitNumrays =  limitNumrays,
+        disableMapLights   = false --doesn't persist yet, should probably use onScenarioLoaded or something
     }
     jsonWriteFile(settingsPath, s, true)
 end
@@ -157,6 +229,11 @@ local function settingsLoad()
            limitNumrays = s.limitNumrays
             M.limitNumrays = limitNumrays
         end
+        if s.disableMapLights ~= nil then
+            disableMapLights = s.disableMapLights
+            M.disableMapLights = disableMapLights
+            toggleMapLights(disableMapLights)
+        end
     else
         log("I", logtag, "No saved settings found, using defaults.")
     end
@@ -167,7 +244,7 @@ local showUI = ui.BoolPtr(false)
 
 local function renderUI()
     ui.SetNextWindowSize(ui.ImVec2(500, 500), ui.Cond_FirstUseEver)
-    if ui.Begin("Performance Mod", showUI, ui.WindowFlags_AlwaysAutoResize) then
+    if ui.Begin("Node Performance Mod v3 by tmaster1000", showUI, ui.WindowFlags_AlwaysAutoResize) then
         ui.Text("Optimize remote vehicles for more FPS")
 
         local reduceCollisionPtr = ui.BoolPtr(reduceCollision)
@@ -202,6 +279,18 @@ local function renderUI()
          if ui.IsItemHovered() then
              ui.BeginTooltip()
              ui.Text("Disables collision particles for remote vehicles")
+             ui.EndTooltip()
+         end
+         local ptPtr = ui.BoolPtr(disableMapLights)
+         if ui.Checkbox("Remove Map Lights (not persistent)", ptPtr) then
+             disableMapLights = ptPtr[0]
+             M.disableMapLights = disableMapLights
+             toggleMapLights(disableMapLights)
+             settingsSave()
+         end
+         if ui.IsItemHovered() then
+             ui.BeginTooltip()
+               ui.Text("Removes all light objects from the map NOTE: Setting does not persist - you have to enable it every time")
              ui.EndTooltip()
          end
         ui.Separator()
@@ -278,6 +367,7 @@ M.reduceCollision = reduceCollision
 M.disablePropsLights = disablePropsLights
 M.disableTires = disableTires
 M.disableAero = disableAero
+M.disableMapLights = disableMapLights
 
 M.onSpawnCCallback = onSpawnCCallback
 M.playerReloadCheck = playerReloadCheck

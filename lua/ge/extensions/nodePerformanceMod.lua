@@ -1,4 +1,6 @@
+
 -- Credit: tmaster1000(GitHub) / thrustermaster (Discord), _N_S_ (BeamNG Forums), Unshown
+--https://github.com/tmaster1000/node-performance-mod
 --GE LUA player processing is marked with global variables, VE LUA vehicles are marked by setting vehicleConfig values
 
 local M = {}
@@ -33,6 +35,7 @@ local function getFields(objectId)
 end
 
 local function removeMapLights()
+    log("I", logtag, "Removing map lights")
     removedLights = {}
 
     local function recurse(grp)
@@ -80,6 +83,7 @@ local function removeMapLights()
 end
 
 local function restoreMapLights()
+    log("I", logtag, "Restoring map lights")
     for _, info in ipairs(removedLights) do
         SimObject.setForcedId(info.forcedID)
         local parent = scenetree.findObjectById(info.parentID)
@@ -89,7 +93,11 @@ local function restoreMapLights()
 end
 
 local function toggleMapLights(off)
-    if off then removeMapLights() else restoreMapLights() end
+    if off then
+        removeMapLights()
+    else
+        restoreMapLights()
+        end
 end
 
 local function isPlayerVehicle(objID)
@@ -173,10 +181,6 @@ local function onSpawnCCallback(objID)
     end
 end
 
-local function onLoadingScreenFadeout()
-    guihooks.trigger('toastrMsg',
-        { type = "info", title = "Performance Mod active", msg = "Press F10 for options", config = { timeOut = 5000 } })
-end
 
 function onLuaReloaded() -- LUA reloads will clear the table so we attempt to salvage something by setting player vehicle to the current vehicle
     local playerVehicleID = be:getPlayerVehicleID(0)
@@ -197,7 +201,7 @@ local function settingsSave()
         disableAero = disableAero,
         disableParticles = disableParticles,
         limitNumrays =  limitNumrays,
-        disableMapLights   = false --doesn't persist yet, should probably use onScenarioLoaded or something
+        disableMapLights   = disableMapLights
     }
     jsonWriteFile(settingsPath, s, true)
 end
@@ -232,7 +236,7 @@ local function settingsLoad()
         if s.disableMapLights ~= nil then
             disableMapLights = s.disableMapLights
             M.disableMapLights = disableMapLights
-            toggleMapLights(disableMapLights)
+            -- toggleMapLights(disableMapLights) -- runs onWorldReadyState
         end
     else
         log("I", logtag, "No saved settings found, using defaults.")
@@ -244,34 +248,34 @@ local showUI = ui.BoolPtr(false)
 
 local function renderUI()
     ui.SetNextWindowSize(ui.ImVec2(500, 500), ui.Cond_FirstUseEver)
-    if ui.Begin("Node Performance Mod v3 by tmaster1000", showUI, ui.WindowFlags_AlwaysAutoResize) then
+    if ui.Begin("Node Performance Mod v3", showUI, ui.WindowFlags_AlwaysAutoResize) then
         ui.Text("Optimize remote vehicles for more FPS")
 
         local reduceCollisionPtr = ui.BoolPtr(reduceCollision)
-        if ui.Checkbox("Reduce Collisions", reduceCollisionPtr) then
+        if ui.Checkbox("Reduce collisions and disable self-Collision", reduceCollisionPtr) then
             reduceCollision = reduceCollisionPtr[0]
             M.reduceCollision = reduceCollision
             settingsSave()
         end
         if ui.IsItemHovered() then
             ui.BeginTooltip()
-            ui.Text("Reduces node collision for remote vehicles and disables collision with own nodes for all vehicles")
+            ui.Text("Disables node collision for nodes not on the outer shell of the vehicle for remote vehicles and disables self-collision for all vehicles")
             ui.EndTooltip()
         end
 
         local disablePropsLightsPtr = ui.BoolPtr(disablePropsLights)
-        if ui.Checkbox("Reduce Props and Lights", disablePropsLightsPtr) then
+        if ui.Checkbox("Disable props and lights", disablePropsLightsPtr) then
             disablePropsLights = disablePropsLightsPtr[0]
             M.disablePropsLights = disablePropsLights
             settingsSave()
         end
         if ui.IsItemHovered() then
             ui.BeginTooltip()
-            ui.Text("Disables headlight flares and leaves headlight glow for remote vehicles ")
+            ui.Text("Disables headlight flare and most props for remote vehicles")
             ui.EndTooltip()
         end
        local disableParticlesPtr = ui.BoolPtr(disableParticles)
-         if ui.Checkbox("Disable Collision Particles", disableParticlesPtr) then
+         if ui.Checkbox("Disable collision particles", disableParticlesPtr) then
              disableParticles = disableParticlesPtr[0]
              M.disableParticles = disableParticles
              settingsSave()
@@ -282,7 +286,7 @@ local function renderUI()
              ui.EndTooltip()
          end
          local ptPtr = ui.BoolPtr(disableMapLights)
-         if ui.Checkbox("Remove Map Lights (not persistent)", ptPtr) then
+         if ui.Checkbox("Remove map lights - NOTE: Slightly slows down level loading", ptPtr) then
              disableMapLights = ptPtr[0]
              M.disableMapLights = disableMapLights
              toggleMapLights(disableMapLights)
@@ -290,7 +294,7 @@ local function renderUI()
          end
          if ui.IsItemHovered() then
              ui.BeginTooltip()
-               ui.Text("Removes all light objects from the map NOTE: Setting does not persist - you have to enable it every time")
+               ui.Text("Removes all light objects from the map")
              ui.EndTooltip()
          end
         ui.Separator()
@@ -307,7 +311,7 @@ local function renderUI()
             ui.EndTooltip()
         end
         local disableAeroPtr = ui.BoolPtr(disableAero)
-        if ui.Checkbox("Disable Aerodynamics", disableAeroPtr) then
+        if ui.Checkbox("Disable aerodynamics", disableAeroPtr) then
             disableAero = disableAeroPtr[0]
             M.disableAero = disableAero
             settingsSave()
@@ -318,7 +322,7 @@ local function renderUI()
             ui.EndTooltip()
         end
         local disableTiresPtr = ui.BoolPtr(disableTires)
-        if ui.Checkbox("Disable Tires (for desperate people)", disableTiresPtr) then
+        if ui.Checkbox("Disable tires (for desperate people)", disableTiresPtr) then
             disableTires = disableTiresPtr[0]
             M.disableTires = disableTires
             settingsSave()
@@ -329,7 +333,10 @@ local function renderUI()
             ui.EndTooltip()
         end
         ui.Separator()
-        ui.Text("Changes will affect all new or reloaded cars automatically - CTRL+SHIFT+R to force reload")
+        ui.Text("github.com/tmaster1000/node-performance-mod")
+        ui.Separator()
+        ui.Text("Settings affect all new or reloaded cars and persist across sessions")
+        ui.Text("CTRL+SHIFT+R to force reload vehicles")
     end
     ui.End()
 end
@@ -350,6 +357,12 @@ end
 
 local function hide()
     showUI[0] = false
+end
+
+local function onLoadingScreenFadeout() --somehow onWorldReadyState is too early and user cant restore the lights anymore
+    toggleMapLights(M.disableMapLights)
+    guihooks.trigger('toastrMsg',
+        { type = "info", title = "Node Performance Mod Active", msg = "Press F10 for options", config = { timeOut = 5000 } })
 end
 
 local function onExtensionLoaded()

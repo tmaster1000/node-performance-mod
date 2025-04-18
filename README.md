@@ -1,3 +1,6 @@
+
+![image](https://github.com/user-attachments/assets/9da4e989-4c08-4c76-8bad-16001ac18414)
+
 This mod attempts to optimize remote vehicles for better BeamMP performance. For the player vehicle it disables collision with itself.
 
 **Important, read before using:**

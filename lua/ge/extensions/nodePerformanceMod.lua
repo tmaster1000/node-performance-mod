@@ -23,8 +23,14 @@ M.playerReloadProcessing = false
 M.playerDestroyProcessing = nil
 
 local isLoaded = false
-
 local removedLights = {}
+
+--this prevents conflict with another mod
+local IGNORE_PREFIX = "fakeHeadlight"
+local function isFakeHeadlight(obj)
+    local n = obj and obj.getName and obj:getName()
+    return n and n:sub(1, #IGNORE_PREFIX) == IGNORE_PREFIX
+end
 
 local function getFields(objectId)
     local obj = Sim.findObjectById(objectId)
@@ -46,12 +52,13 @@ local function removeMapLights()
             local child = grp:at(i)
             if not child then
                 -- nothing
+            elseif isFakeHeadlight(child) then
+                -- ignore fake headlights
             else
                 local cid = child:getID()
                 local fields = getFields(cid)
 
                 if fields then
-
                     local hasLightGroup = false
                     for _, finfo in pairs(fields) do
                         if finfo.groupName == "Light" then
@@ -61,7 +68,6 @@ local function removeMapLights()
                     end
 
                     if hasLightGroup then
-
                         local dump = "[" .. child:serializeForEditor(true, -1, "") .. "]"
                         table.insert(removedLights, {
                             json     = dump,
@@ -97,7 +103,7 @@ local function toggleMapLights(off)
         removeMapLights()
     else
         restoreMapLights()
-        end
+    end
 end
 
 local function isPlayerVehicle(objID)

@@ -26,10 +26,9 @@ local isLoaded = false
 local removedLights = {}
 
 --this prevents conflict with another mod
-local IGNORE_PREFIX = "fakeHeadlight"
 local function isFakeHeadlight(obj)
     local n = obj and obj.getName and obj:getName()
-    return n and n:sub(1, #IGNORE_PREFIX) == IGNORE_PREFIX
+    return n and n:find("fakeHeadlight", 1, true) ~= nil
 end
 
 local function getFields(objectId)

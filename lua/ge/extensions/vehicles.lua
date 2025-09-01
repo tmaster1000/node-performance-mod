@@ -9,19 +9,19 @@ local cloneVehOrig = core_vehicles.cloneCurrent
 local destroyVehOrig = core_vehicles.onVehicleDestroyed
 
 
-core_vehicles.spawnNewVehicle = function(model, opt)
-    nodePerformanceMod.playerSpawnProcessing = true
-    return spawnNewVehOrig(model, opt)
+core_vehicles.spawnNewVehicle = function(...)
+  nodePerformanceMod.playerSpawnProcessing = true
+  return spawnNewVehOrig(...)
 end
 
-core_vehicles.replaceVehicle = function(model, opt, otherVeh)
-    nodePerformanceMod.playerSpawnProcessing = true
-    return replaceVehOrig(model, opt, otherVeh)
+core_vehicles.replaceVehicle = function(...)
+  nodePerformanceMod.playerSpawnProcessing = true
+  return replaceVehOrig(...)
 end
 
-core_vehicles.reloadVehicle = function(playerid)
-    nodePerformanceMod.playerReloadProcessing = true
-    return reloadVehOrig(playerid)
+core_vehicles.reloadVehicle = function(...)
+  nodePerformanceMod.playerReloadProcessing = true
+  return reloadVehOrig(...)
 end
 
 core_vehicles.onVehicleDestroyed = function(id)
@@ -29,14 +29,14 @@ core_vehicles.onVehicleDestroyed = function(id)
     return destroyVehOrig(id)
 end
 
-core_vehicles.loadDefaultVehicle = function(id)
-    nodePerformanceMod.playerSpawnProcessing = true
-    return defaultVehOrig(id)
+core_vehicles.loadDefaultVehicle = function(...)
+  nodePerformanceMod.playerSpawnProcessing = true
+  return defaultVehOrig(...)
 end
 
-core_vehicles.cloneCurrent = function()
-    nodePerformanceMod.playerSpawnProcessing = true
-    return cloneVehOrig()
+core_vehicles.cloneCurrent = function(...)
+  nodePerformanceMod.playerSpawnProcessing = true
+  return cloneVehOrig(...)
 end
 
 --public interface

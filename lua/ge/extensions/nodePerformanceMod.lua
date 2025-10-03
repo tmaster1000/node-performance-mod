@@ -39,9 +39,7 @@ local function getFields(objectId)
     return nil
 end
 
--- helper: fetch MissionGroup safely
 local function getMissionGroup()
-    -- prefer direct field if available, fall back to findObject
     if scenetree and scenetree.MissionGroup then
         return Sim.upcast(scenetree.MissionGroup)
     end
@@ -103,7 +101,6 @@ local function removeMapLights()
         end
     end
 
-    -- only traverse MissionGroup, not the full Sim root
     recurse(missionGroup)
 end
 

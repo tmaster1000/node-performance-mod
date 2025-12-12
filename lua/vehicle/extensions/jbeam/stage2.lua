@@ -1,113 +1,109 @@
---Credit: tmaster1000(GitHub) / thrustermaster (Discord), thanks to Anonymous275(GitHub) for the idea
---Injects into stage2.lua to modify node collision parameters
+-- Credit: tmaster1000 / thrustermaster, thanks Anonymous275 for the idea
+
 local stage2 = require("vehicle/jbeam/stage2")
 local abs = math.abs
 local logtag = "nodePerformanceMod.meshs"
 
---new version, considers top 2 best candidates for shell node instead of previous top 1. Laggier but much better, still disables half the collision
-local function nodeCheck(nodeID, vehicle)
-    local connectedNodes = {}
-    for i = 1, #vehicle.beams do
-        local beam = vehicle.beams[i]
-        if beam.id1 == nodeID then
-            connectedNodes[beam.id2] = true
-        elseif beam.id2 == nodeID then
-            connectedNodes[beam.id1] = true
-        end
-    end
-
-    local shellNode = {true, true, true}
-    local distances = {}
-    local function isAmongTopTwo(nodeID, axis)
-        for k in pairs(distances) do distances[k] = nil end -- Clear table
-        local nodePos = math.abs(vehicle.nodes[nodeID].pos[axis])
-
-        for id in pairs(connectedNodes) do
-            table.insert(distances, math.abs(vehicle.nodes[id].pos[axis]))
-        end
-        table.insert(distances, nodePos)
-
-        table.sort(distances, function(a, b) return a > b end)
-
-        for i = 1, math.min(2, #distances) do
-            if nodePos == distances[i] then
-                --vehicle.nodes[nodeID].highlight = true
-                return true
-            end
-        end
-        return false
-    end
-
-    if not isAmongTopTwo(nodeID, "x") then
-        shellNode[1] = false
-    end
-    if not isAmongTopTwo(nodeID, "y") then
-        shellNode[2] = false
-    end
-    if not isAmongTopTwo(nodeID, "z") then
-        shellNode[3] = false
-    end
-
-    return shellNode[1] or shellNode[2] or shellNode[3]
+local function countCArray(t)
+  if tableSizeC then return tableSizeC(t) end
+  local maxk = -1
+  for k in pairs(t or {}) do
+    if type(k) == "number" and k > maxk then maxk = k end
+  end
+  return maxk + 1
 end
 
+local function nodeCheck(nodeID, vehicle)
+  local connectedNodes = {}
+  for i = 1, #vehicle.beams do
+    local beam = vehicle.beams[i]
+    if beam.id1 == nodeID then
+      connectedNodes[beam.id2] = true
+    elseif beam.id2 == nodeID then
+      connectedNodes[beam.id1] = true
+    end
+  end
 
+  local shellNode = { true, true, true }
+  local distances = {}
+
+  local function isAmongTopTwo(localNodeID, axis)
+    for k in pairs(distances) do distances[k] = nil end
+    local nodePos = abs(vehicle.nodes[localNodeID].pos[axis])
+
+    for id in pairs(connectedNodes) do
+      table.insert(distances, abs(vehicle.nodes[id].pos[axis]))
+    end
+    table.insert(distances, nodePos)
+
+    table.sort(distances, function(a, b) return a > b end)
+
+    for i = 1, math.min(2, #distances) do
+      if nodePos == distances[i] then
+        return true
+      end
+    end
+    return false
+  end
+
+  if not isAmongTopTwo(nodeID, "x") then shellNode[1] = false end
+  if not isAmongTopTwo(nodeID, "y") then shellNode[2] = false end
+  if not isAmongTopTwo(nodeID, "z") then shellNode[3] = false end
+
+  return shellNode[1] or shellNode[2] or shellNode[3]
+end
+
+local function disableSelfCollisionIfPresent(vehicle)
+  if not vehicle or not vehicle.nodes then return end
+  local nCount = countCArray(vehicle.nodes)
+  for i = 0, nCount - 1 do
+    local node = vehicle.nodes[i]
+    if node and node.selfCollision ~= nil then
+      node.selfCollision = false
+    end
+  end
+end
+
+local function limitRemoteVehicleCollision(vehicle)
+  if not vehicle or not vehicle.nodes or not vehicle.beams then return end
+  local nCount = countCArray(vehicle.nodes)
+
+  for i = 0, nCount - 1 do
+    local node = vehicle.nodes[i]
+    if node then
+      if node.wheelID ~= nil or nodeCheck(node.cid, vehicle) == true then
+        goto continue
+      end
+      node.collision = false
+      ::continue::
+      if node.selfCollision ~= nil then
+        node.selfCollision = false
+      end
+    end
+  end
+end
 
 do
-    local loadVehicleStage2 = stage2.loadVehicleStage2
-    stage2.loadVehicleStage2 = function(v)
+  local origLoadVehicleStage2 = stage2.loadVehicleStage2
 
-        stage2.loadVehicleStage2 = loadVehicleStage2
-        local pushToPhysics = ({debug.getupvalue(stage2.loadVehicleStage2, 1)})[2]
-        local processNodes = ({debug.getupvalue(pushToPhysics, 1)})[2]
-        --local processBeams = ({debug.getupvalue(pushToPhysics, 2)})[2]
-        --local processWheels = ({debug.getupvalue(pushToPhysics, 3)})[2]
-        --local processRails = ({debug.getupvalue(pushToPhysics, 4)})[2]
-        --local processSlidenodes = ({debug.getupvalue(pushToPhysics, 5)})[2]
-        --local processTorsionhydros = ({debug.getupvalue(pushToPhysics, 6)})[2]
-       -- local processTorsionbars = ({debug.getupvalue(pushToPhysics, 7)})[2]
-       --local processTriangles = ({debug.getupvalue(pushToPhysics, 8)})[2]
-        --local processRefNodes = ({debug.getupvalue(pushToPhysics, 9)})[2]
+  stage2.loadVehicleStage2 = function(vdataStage1)
+    stage2.loadVehicleStage2 = origLoadVehicleStage2
 
-        if  v.config.isPlayerVehicle then --player modifications
-            debug.setupvalue(pushToPhysics, 1, function(vehicle)
+    local v = vdataStage1 and vdataStage1.vdata
+    local cfg = vdataStage1 and vdataStage1.config
 
-                if vehicle.nodes == nil then return end
-
-                for _, node in pairs(vehicle.nodes) do
-                    if node.selfCollision ~= nil then
-                        node.selfCollision = false
-                    end
-                end
-
-                debug.setupvalue(pushToPhysics, 1, processNodes)
-                return processNodes(vehicle)
-            end)
+    if v and cfg then
+      if cfg.isPlayerVehicle then
+        disableSelfCollisionIfPresent(v)
         log("I", logtag, "Disabled Self-Collision for player vehicle")
-        else --non player modifications
-            debug.setupvalue(pushToPhysics, 1, function(vehicle)
-
-                if vehicle.nodes == nil then return end
-
-                for _, node in pairs(vehicle.nodes) do
-
-                    if node.wheelID ~= nil or nodeCheck(node.cid, vehicle) == true then
-                        goto continue
-                    end
-                    node.collision = false
-                    ::continue::
-                    if node.selfCollision ~= nil then
-                        node.selfCollision = false
-                    end
-                end
-
-                debug.setupvalue(pushToPhysics, 1, processNodes)
-                return processNodes(vehicle)
-            end)
-            log("I", logtag, "Collision limited for remote vehicle")
-        end
-        return loadVehicleStage2(v)
+      else
+        limitRemoteVehicleCollision(v)
+        log("I", logtag, "Collision limited for remote vehicle")
+      end
     end
+
+    return origLoadVehicleStage2(vdataStage1)
+  end
 end
 
 return stage2
